@@ -1,0 +1,60 @@
+itemGroup.ants=Ants!
+
+tile.ants.hill_entrance.name=Ant Hill Entrance
+tile.ants.hill_chamber.queenschamber.name=Queens Chamber
+tile.ants.hill_chamber.storagechamber.name=Storage Chamber
+tile.ants.hill_chamber.livingquarters.name=Living Quarters
+tile.ants.hill_chamber.foraginggrounds.name=Foraging Grounds
+
+tile.ants.hill.overlay.id=ID:
+tile.ants.hill.overlay.ants=Ants:
+tile.ants.hill.overlay.chambers=Chambers:
+
+tile.ants.hill.tooltip.must_be_next_to_anthill_with_id=Can only be placed next to an ant hill with id: %d.
+tile.ants.hill.tooltip.must_be_next_to_anthill=Must be placed next to an existing ant hill.
+tile.ants.hill.tooltip.can_not_touch=Two independent ant colonies can not touch!
+tile.ants.hill.tooltip.must_start_new_colony=Can only be used to start a new ant colony.
+
+gui.ants.hill_chamber.tabs.buy.tooltip=Buy chambers
+gui.ants.hill_chamber.tabs.stats.tooltip=Hill Overview
+
+gui.ants.hill_chamber.tabs.stats.total_ants=Total Ants
+gui.ants.hill_chamber.tabs.stats.stored_food=Stored Food
+
+gui.ants.hill_chamber.infos.max_label_value=Max: %s
+gui.ants.hill_chamber.infos.need_more_ants=You need more ants!
+gui.ants.hill_chamber.infos.need_one_worker=You need at least one worker first.
+gui.ants.hill_chamber.infos.out_of_room=Out of room!
+gui.ants.hill_chamber.infos.upgrade_first=Upgrade first!
+gui.ants.hill_chamber.infos.price=Price: %s ants
+
+gui.ants.hill_chamber.stats.total_ants.tooltip.queens=Queens: %d
+gui.ants.hill_chamber.stats.total_ants.tooltip.interval=Interval: %s
+gui.ants.hill_chamber.stats.total_ants.tooltip.beds=Beds: %d
+gui.ants.hill_chamber.stats.stored_food.tooltip.eaten=- %s/s
+gui.ants.hill_chamber.stats.stored_food.tooltip.gathered=+ %s/s
+gui.ants.hill_chamber.stats.stored_food.tooltip.total== %s/s
+
+
+gui.ants.upgradeable_chamber.upgrades.label=Upgrades
+gui.ants.workable_chamber.workers.label=Workers
+gui.ants.workable_chamber.workers.fill=Fill
+
+
+gui.ants.chamber.common.upgrade.tooltip=Upgrades provide extra space for workers and increase their efficiency.
+gui.ants.chamber.common.worker.tooltip=Each worker increases the efficiency of this chamber.
+gui.ants.chamber.common.worker.stats.worker_production=Worker production:
+gui.ants.chamber.common.stats.percent_of_total=%% of Total:
+
+
+gui.ants.chamber.queens_chamber.stats.interval_reduced=Speed increase:
+gui.ants.chamber.queens_chamber.description=Increases the amount and birth frequency of ants.
+
+gui.ants.chamber.living_quarters.stats.beds=Beds:
+gui.ants.chamber.living_quarters.description=Increases your maximum ant capacity.
+
+gui.ants.chamber.storage_chamber.space=Capacity: %s
+gui.ants.chamber.storage_chamber.description=Increases the maximum food you can store.
+
+gui.ants.chamber.foraging_grounds.stats.food_gathered=Food gain:
+gui.ants.chamber.foraging_grounds.description=Increases the amount of food your colony gathers.

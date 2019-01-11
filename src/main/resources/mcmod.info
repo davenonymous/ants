@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ants",
+  "name": "Ants",
+  "description": "Ants!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ['Davenonymous'],
+  "credits": "Davenonymous",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

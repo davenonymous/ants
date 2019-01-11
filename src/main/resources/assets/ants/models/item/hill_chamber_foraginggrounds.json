@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "ants:items/colorable_ant",
+    "layer1": "ants:items/colorable_ant_overlay"
+  }
+}
