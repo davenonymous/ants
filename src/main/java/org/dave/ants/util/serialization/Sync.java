@@ -1,4 +1,4 @@
-package org.dave.ants.api.serialization;
+package org.dave.ants.util.serialization;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

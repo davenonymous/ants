@@ -1,8 +1,7 @@
-package org.dave.ants.render;
+package org.dave.ants.api.render;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
-import org.dave.ants.api.render.IVoxelSpace;
 
 public class VoxelSpaceTools {
     public static void drawCircle(IVoxelSpace voxels, int centerX, int centerY, int centerZ, int radius, BlockLog.EnumAxis axis, IBlockState state) {

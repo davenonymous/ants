@@ -3,6 +3,7 @@ package org.dave.ants.misc;
 
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.dave.ants.Ants;
 import org.dave.ants.hills.HillRegistry;
 
 public class WorldSavedDataRegistry {
@@ -21,5 +22,7 @@ public class WorldSavedDataRegistry {
             event.getWorld().getMapStorage().setData("AntHillRegistry", hills);
         }
         hills.afterLoad();
+
+        Ants.pluginRegistry.forEach(plugin -> plugin.worldHillRegistryReady(hills));
     }
 }

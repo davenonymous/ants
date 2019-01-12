@@ -7,15 +7,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import org.dave.ants.Ants;
 import org.dave.ants.actions.BuyChamber;
+import org.dave.ants.api.actions.IAntGuiAction;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.chambers.IChamberAction;
-import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.hill.IHillData;
 import org.dave.ants.api.properties.IHillProperty;
 import org.dave.ants.api.properties.stored.TotalAnts;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
-import org.dave.ants.calculation.CalculationRegistry;
 import org.dave.ants.tiles.BaseHillTile;
 import org.dave.ants.util.DimPos;
 import org.dave.ants.util.Logz;
@@ -104,7 +102,7 @@ public class HillData extends BaseNBTSerializable implements IHillData {
         this.markDirty();
     }
 
-    public void onHillAction(EntityPlayerMP player, IChamberAction action) {
+    public void onHillAction(EntityPlayerMP player, IAntGuiAction action) {
         if(action instanceof BuyChamber) {
             BuyChamber buyChamberAction = (BuyChamber)action;
 

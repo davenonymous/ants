@@ -4,9 +4,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.hill.IHillRegistry;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseWorldSavedData;
 import org.dave.ants.util.DimPos;
 import org.dave.ants.util.Logz;
@@ -116,7 +115,6 @@ public class HillRegistry extends BaseWorldSavedData implements IHillRegistry {
         return getHillDataByPosition(new DimPos(world, pos));
     }
 
-    @Override
     @Nullable
     public HillData getHillDataByPosition(DimPos pos) {
         if(!posHillMap.containsKey(pos)) {

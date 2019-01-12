@@ -9,8 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.dave.ants.api.serialization.Store;
-import org.dave.ants.util.Logz;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.util.serialization.FieldUtils;
 import org.dave.ants.util.serialization.NBTFieldSerializationData;
 

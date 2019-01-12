@@ -7,10 +7,9 @@ import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamberVoxelHandler;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IAntChamberVoxelHandler;
-import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.render.IVoxelSpace;
 import org.dave.ants.blocks.BaseHillBlock;
-import org.dave.ants.render.VoxelSpaceTools;
+import org.dave.ants.api.render.VoxelSpaceTools;
 import org.dave.ants.render.properties.UnlistedPropertyHillNeighbors;
 
 import java.awt.*;

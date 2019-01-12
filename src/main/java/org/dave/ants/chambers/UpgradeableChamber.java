@@ -2,16 +2,16 @@ package org.dave.ants.chambers;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import org.dave.ants.actions.ActionRegistry;
+import org.dave.ants.Ants;
 import org.dave.ants.actions.Upgrade;
+import org.dave.ants.api.actions.IAntGuiAction;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.chambers.IChamberAction;
 import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.*;
 import org.dave.ants.api.gui.widgets.composed.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.stored.TotalAnts;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
@@ -73,7 +73,7 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
         button.setX(165 - buttonWidth - 1);
         button.setY(1);
         button.addListener(MouseClickEvent.class, (event, widget) -> {
-            ActionRegistry.fireChamberAction(new Upgrade());
+            Ants.actionRegistry.fireChamberAction(new Upgrade());
             return WidgetEventResult.HANDLED;
         });
 
@@ -92,7 +92,7 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
     }
 
     @Override
-    public void onChamberAction(EntityPlayer player, IChamberAction action, HillData hillData) {
+    public void onChamberAction(EntityPlayer player, IAntGuiAction action, HillData hillData) {
         if(action instanceof Upgrade) {
             double totalAnts = hillData.getPropertyValue(TotalAnts.class);
             double price = getUpgradePrice();

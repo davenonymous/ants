@@ -5,18 +5,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import org.dave.ants.api.chambers.IChamberAction;
+import org.dave.ants.api.actions.IAntGuiAction;
 import org.dave.ants.util.DimPos;
 
 public class ChamberActionMessage implements IMessage {
     DimPos pos;
-    Class<? extends IChamberAction> actionType;
+    Class<? extends IAntGuiAction> actionType;
     NBTTagCompound actionData;
 
     public ChamberActionMessage() {
     }
 
-    public ChamberActionMessage(DimPos pos, IChamberAction action) {
+    public ChamberActionMessage(DimPos pos, IAntGuiAction action) {
         this.pos = pos;
         this.actionType = action.getClass();
         this.actionData = action.serializeNBT();
@@ -28,7 +28,7 @@ public class ChamberActionMessage implements IMessage {
 
         String typeName = ByteBufUtils.readUTF8String(buf);
         try {
-            this.actionType = (Class<? extends IChamberAction>) Class.forName(typeName);
+            this.actionType = (Class<? extends IAntGuiAction>) Class.forName(typeName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package org.dave.ants.api.serialization;
+package org.dave.ants.util.serialization;
 
 public @interface SerializationHandler {
     Class readClass() default void.class;

@@ -131,7 +131,7 @@ public class ClientChamberGuiCache {
             button.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(cost)));
 
             button.addListener(MouseClickEvent.class, (event, widget) -> {
-                ActionRegistry.fireHillAction(new BuyChamber(type));
+                Ants.actionRegistry.fireHillAction(new BuyChamber(type));
                 return WidgetEventResult.HANDLED;
             });
 

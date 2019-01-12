@@ -2,13 +2,14 @@ package org.dave.ants.hills;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.dave.ants.api.IAntStackData;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
 
 import javax.annotation.Nullable;
 
-public class HillItemStackData extends BaseNBTSerializable {
+public class HillItemStackData extends BaseNBTSerializable implements IAntStackData {
     @Store
     private int hillId = -1;
 
@@ -35,31 +36,38 @@ public class HillItemStackData extends BaseNBTSerializable {
         }
     }
 
+    @Override
     public boolean hasChamberData() {
         return chamberData != null;
     }
 
+    @Override
     public NBTTagCompound getChamberData() {
         return chamberData;
     }
 
+    @Override
     public int getHillId() {
         return hillId;
     }
 
+    @Override
     public boolean hasHillId() {
         return hillId != -1;
     }
 
+    @Override
     public int getChamberTier() {
         return chamberTier;
     }
 
+    @Override
     @Nullable
     public Class<? extends IAntChamber> getChamberType() {
         return chamberType;
     }
 
+    @Override
     public boolean hasChamberType() {
         return chamberType != null;
     }

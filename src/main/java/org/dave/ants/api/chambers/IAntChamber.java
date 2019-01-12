@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.dave.ants.api.actions.IAntGuiAction;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.properties.IHillProperty;
 import org.dave.ants.hills.HillData;
@@ -186,7 +187,7 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      * Upgradeable chambers should show the upgrade level and an upgrade button for
      * example. Read the documentation for the WidgetPanel for further details.
      *
-     * You can use the IActionRegistry on the client to fire an IChamberAction
+     * You can use the IActionRegistry on the client to fire an IAntGuiAction
      * that is being executed on the server in the onChamberAction method.
      *
      * Only called on the client.
@@ -200,7 +201,7 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
     }
 
     /**
-     * If you fire an IChamberAction in the WidgetPanel you created in createGuiPanel
+     * If you fire an IAntGuiAction in the WidgetPanel you created in createGuiPanel
      * you can handle here what should happen to this chamber or the whole hill this
      * chamber belongs to. Feel free to modify any data here, but if you do, remember
      * to mark it as dirty and potentially trigger updateHillStatistics on the HillData
@@ -215,7 +216,7 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      * @param action   The actual action that has been performed.
      * @param hillData The runtime data of the hill this chamber belongs to.
      */
-    default void onChamberAction(EntityPlayer player, IChamberAction action, HillData hillData) {
+    default void onChamberAction(EntityPlayer player, IAntGuiAction action, HillData hillData) {
 
     }
 

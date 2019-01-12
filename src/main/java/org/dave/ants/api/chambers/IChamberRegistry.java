@@ -1,7 +1,7 @@
 package org.dave.ants.api.chambers;
 
 import net.minecraft.item.ItemStack;
-import org.dave.ants.hills.HillItemStackData;
+import org.dave.ants.api.IAntStackData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,13 +13,13 @@ public interface IChamberRegistry {
     ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType);
 
     @Nullable
-    IAntChamber getChamberInstance(@Nonnull HillItemStackData data);
+    IAntChamber getChamberInstance(@Nonnull IAntStackData data);
 
     @Nullable
     IAntChamber getChamberInstance(Class<? extends IAntChamber> type);
 
     @Nullable
-    IAntChamber getChamberInstance(Class<? extends IAntChamber> type, @Nullable HillItemStackData data);
+    IAntChamber getChamberInstance(Class<? extends IAntChamber> type, @Nullable IAntStackData data);
 
     Set<Class<? extends IAntChamber>> getChamberTypes();
 }

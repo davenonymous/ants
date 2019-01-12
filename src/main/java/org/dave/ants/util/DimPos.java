@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
 
 import javax.annotation.Nullable;

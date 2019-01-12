@@ -8,8 +8,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import org.dave.ants.actions.ActionRegistry;
 import org.dave.ants.calculation.CalculationRegistry;
 import org.dave.ants.chambers.ChamberRegistry;
+import org.dave.ants.compat.AntApiHelpers;
 import org.dave.ants.compat.CompatHandler;
 import org.dave.ants.compat.PluginRegistry;
 import org.dave.ants.config.ConfigurationHandler;
@@ -48,6 +50,8 @@ public class Ants {
     public static final ChamberRegistry chamberTypes = new ChamberRegistry();
     public static final CalculationRegistry calculations = new CalculationRegistry();
     public static final VoxelHandlerRegistry voxelHandlers = new VoxelHandlerRegistry();
+    public static final ActionRegistry actionRegistry = new ActionRegistry();
+    public static final AntApiHelpers apiHelpers = new AntApiHelpers();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -67,6 +71,8 @@ public class Ants {
         pluginRegistry.forEach(plugin -> plugin.registryReady(calculations));
         voxelHandlers.loadVoxelHandlers();
         pluginRegistry.forEach(plugin -> plugin.registryReady(voxelHandlers));
+        pluginRegistry.forEach(plugin -> plugin.registryReady(actionRegistry));
+        pluginRegistry.forEach(plugin -> plugin.helpersReady(apiHelpers));
 
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(ConfigurationHandler.class);

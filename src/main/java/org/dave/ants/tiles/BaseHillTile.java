@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseTileEntity;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.DimPos;

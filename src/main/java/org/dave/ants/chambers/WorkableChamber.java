@@ -2,9 +2,9 @@ package org.dave.ants.chambers;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import org.dave.ants.actions.ActionRegistry;
+import org.dave.ants.Ants;
 import org.dave.ants.actions.AddWorker;
-import org.dave.ants.api.chambers.IChamberAction;
+import org.dave.ants.api.actions.IAntGuiAction;
 import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.Widget;
@@ -13,7 +13,7 @@ import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetProgressBar;
 import org.dave.ants.api.gui.widgets.composed.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.stored.TotalAnts;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
@@ -75,7 +75,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
         addWorkerButton.setHeight(20);
         addWorkerButton.setY(24);
         addWorkerButton.addListener(MouseClickEvent.class, (event, widget) -> {
-            ActionRegistry.fireChamberAction(new AddWorker(count));
+            Ants.actionRegistry.fireChamberAction(new AddWorker(count));
             return WidgetEventResult.HANDLED;
         });
 
@@ -154,7 +154,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
     }
 
     @Override
-    public void onChamberAction(EntityPlayer player, IChamberAction action, HillData hillData) {
+    public void onChamberAction(EntityPlayer player, IAntGuiAction action, HillData hillData) {
         super.onChamberAction(player, action, hillData);
 
         if(action instanceof AddWorker) {

@@ -1,7 +1,7 @@
 package org.dave.ants.tiles;
 
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.serialization.Store;
+import org.dave.ants.util.serialization.Store;
 
 public class ChamberHillTile extends BaseHillTile {
     @Store(sendInUpdatePackage = true, storeWithItem = true)

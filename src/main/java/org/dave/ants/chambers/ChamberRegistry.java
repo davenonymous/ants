@@ -2,6 +2,7 @@ package org.dave.ants.chambers;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.dave.ants.api.IAntStackData;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.config.GeneralAntHillConfig;
@@ -53,7 +54,7 @@ public class ChamberRegistry implements IChamberRegistry {
 
     @Override
     @Nullable
-    public IAntChamber getChamberInstance(@Nonnull HillItemStackData data) {
+    public IAntChamber getChamberInstance(@Nonnull IAntStackData data) {
         try {
             IAntChamber result = data.getChamberType().newInstance();
             if(data.hasChamberData()) {
@@ -78,7 +79,7 @@ public class ChamberRegistry implements IChamberRegistry {
 
     @Override
     @Nullable
-    public IAntChamber getChamberInstance(Class<? extends IAntChamber> type, @Nullable HillItemStackData data) {
+    public IAntChamber getChamberInstance(Class<? extends IAntChamber> type, @Nullable IAntStackData data) {
         try {
             IAntChamber result = type.newInstance();
             if(data != null && data.hasChamberData()) {

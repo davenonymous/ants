@@ -6,7 +6,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import org.dave.ants.api.chambers.AntChamberVoxelHandler;
 import org.dave.ants.api.chambers.IAntChamberVoxelHandler;
 import org.dave.ants.api.render.IVoxelSpace;
-import org.dave.ants.render.VoxelSpaceTools;
+import org.dave.ants.api.render.VoxelSpaceTools;
 
 @AntChamberVoxelHandler(antChamberType = EntranceChamber.class)
 public class EntranceChamberVoxelHandler implements IAntChamberVoxelHandler {

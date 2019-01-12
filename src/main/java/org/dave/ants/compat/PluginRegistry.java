@@ -14,7 +14,7 @@ public class PluginRegistry {
 
     public void loadAntsPlugins() {
         plugins = new ArrayList<>();
-        
+
         List<String> disabledPlugins = Arrays.asList(GeneralAntHillConfig.disabledPlugins);
         for(IAntPlugin plugin : AnnotatedInstanceUtil.getAntPlugins()) {
             if(disabledPlugins.contains(plugin.getClass().getName())) {

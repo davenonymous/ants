@@ -2,8 +2,6 @@ package org.dave.ants.util.serialization;
 
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.tuple.Pair;
-import org.dave.ants.api.serialization.Store;
-import org.dave.ants.api.serialization.Sync;
 import org.dave.ants.util.Logz;
 import scala.actors.threadpool.Arrays;
 

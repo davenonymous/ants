@@ -1,12 +1,13 @@
 package org.dave.ants.hills;
 
 import org.dave.ants.api.properties.IHillProperty;
+import org.dave.ants.api.properties.IHillPropertyRegistry;
 import org.dave.ants.config.GeneralAntHillConfig;
 import org.dave.ants.util.AnnotatedInstanceUtil;
 
 import java.util.*;
 
-public class HillPropertyRegistry implements org.dave.ants.api.properties.IHillPropertyRegistry {
+public class HillPropertyRegistry implements IHillPropertyRegistry {
     private Map<Class<? extends IHillProperty>, HillPropertyMeta> hillProperties;
 
     public void findHillProperties() {
