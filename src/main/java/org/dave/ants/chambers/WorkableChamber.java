@@ -29,19 +29,48 @@ public abstract class WorkableChamber extends UpgradeableChamber {
      *
      * @return maximum number of workers
      */
-    public abstract int getMaxWorkers();
+    public abstract double getMaxWorkers();
+
 
     /**
-     * How many ants must be "sacrificed" to add another worker. Should increase
-     * with the amount of workers already in this chamber.
+     * Base price for the first worker that can be bought
      *
-     * @param count How many workers should be bought.
-     *
-     * @return ant "price" for a single worker
+     * @return
      */
-    public abstract double priceForWorkers(int count);
+    public abstract double getBaseWorkerPrice();
 
-    private WidgetButton createWorkerButton(String label, int count) {
+
+    /**
+     * Multiplier to the base value for each additional worker.
+     * Calculated like this: baseprice * multiplier^workers
+     *
+     * Balanced values are between 1.07 and 1.15.
+     * See https://gamedevelopment.tutsplus.com/articles/numbers-getting-bigger-the-design-and-math-of-incremental-games--cms-24023
+
+     * @return
+     */
+    public abstract double getWorkerPriceMultiplier();
+
+    public double getPriceForNextWorkers(double count) {
+        return Math.floor(integrate(workers, workers+count, 10));
+    }
+
+    private double getPriceOfWorker(double workers) {
+        return getBaseWorkerPrice() * Math.pow(getWorkerPriceMultiplier(), workers);
+    }
+
+    private double integrate(double a, double b, int N) {
+        double h = (b - a) / N;              // step size
+        double sum = 0.5 * (getPriceOfWorker(a) + getPriceOfWorker(b));    // area
+        for (int i = 1; i < N; i++) {
+            double x = a + h * i;
+            sum = sum + getPriceOfWorker(x);
+        }
+
+        return sum * h;
+    }
+
+    private WidgetButton createWorkerButton(String label, double count) {
         WidgetButton addWorkerButton = new WidgetButton(label);
         addWorkerButton.setHeight(20);
         addWorkerButton.setY(24);
@@ -51,7 +80,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
         });
 
         double totalAnts = getPropertyValue(TotalAnts.class);
-        double price = priceForWorkers(count);
+        double price = getPriceForNextWorkers(count);
 
         addWorkerButton.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(price)));
 
@@ -131,7 +160,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
         if(action instanceof AddWorker) {
             AddWorker addWorkerAction = (AddWorker)action;
 
-            double price = priceForWorkers(addWorkerAction.count);
+            double price = getPriceForNextWorkers(addWorkerAction.count);
             if(price > hillData.getPropertyValue(TotalAnts.class)) {
                 return;
             }

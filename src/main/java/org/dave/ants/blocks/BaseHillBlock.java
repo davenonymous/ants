@@ -43,6 +43,7 @@ import org.dave.ants.network.AntsNetworkHandler;
 import org.dave.ants.network.ChamberDataMessage;
 import org.dave.ants.proxy.GuiProxy;
 import org.dave.ants.render.ChamberHillBakedModel;
+import org.dave.ants.render.properties.UnlistedPropertyChamberTier;
 import org.dave.ants.render.properties.UnlistedPropertyChamberType;
 import org.dave.ants.render.properties.UnlistedPropertyHillNeighbors;
 import org.dave.ants.tiles.BaseHillTile;
@@ -55,6 +56,7 @@ import java.util.List;
 public class BaseHillBlock extends BaseBlock implements ITopInfoProvider {
     public static final UnlistedPropertyChamberType CHAMBER_TYPE = new UnlistedPropertyChamberType();
     public static final UnlistedPropertyHillNeighbors HILL_NEIGHBORS = new UnlistedPropertyHillNeighbors();
+    public static final UnlistedPropertyChamberTier CHAMBER_TIER = new UnlistedPropertyChamberTier();
 
     public BaseHillBlock(String name, Material blockMaterial, MapColor blockMapColor) {
         super(name, blockMaterial, blockMapColor);
@@ -63,7 +65,7 @@ public class BaseHillBlock extends BaseBlock implements ITopInfoProvider {
     @Override
     protected BlockStateContainer createBlockState() {
         IProperty[] listedProperties = new IProperty[0];
-        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] { CHAMBER_TYPE, HILL_NEIGHBORS };
+        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] { CHAMBER_TYPE, HILL_NEIGHBORS, CHAMBER_TIER };
         return new ExtendedBlockState(this, listedProperties, unlistedProperties);
     }
 
@@ -86,12 +88,12 @@ public class BaseHillBlock extends BaseBlock implements ITopInfoProvider {
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
 
-        // Add which kind of chamber this is
-
+        // Add which kind of chamber and tier this block is
         BaseHillTile hillTile = getHillBaseTileEntity(world, pos);
         if(hillTile != null) {
             Class<? extends IAntChamber> type = hillTile.getChamberType();
             extendedBlockState = extendedBlockState.withProperty(CHAMBER_TYPE, type);
+            extendedBlockState = extendedBlockState.withProperty(CHAMBER_TIER, hillTile.getChamberTier());
         }
 
         // Gather chamberData about the neighboring hills
@@ -226,7 +228,7 @@ public class BaseHillBlock extends BaseBlock implements ITopInfoProvider {
         }
 
         player.openGui(Ants.instance, GuiProxy.GuiIDS.ANT_HILL.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
-        AntsNetworkHandler.instance.sendTo(new ChamberDataMessage(hillTile.getChamberType(), liveChamberData.serializeNBT(), hillData.getPropertiesTag(), new DimPos(world, pos)), (EntityPlayerMP) player);
+        AntsNetworkHandler.instance.sendTo(new ChamberDataMessage(hillTile.getChamberType(), liveChamberData.serializeNBT(), hillData.getPropertiesTag(), hillData.getMaxTierLevelsTag(), new DimPos(world, pos)), (EntityPlayerMP) player);
         return true;
     }
 

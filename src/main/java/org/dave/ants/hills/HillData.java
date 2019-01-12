@@ -4,20 +4,20 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.dave.ants.actions.BuyChamber;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IChamberAction;
+import org.dave.ants.api.hill.IHillData;
 import org.dave.ants.api.hill.IHillProperty;
-import org.dave.ants.api.properties.calculated.*;
-import org.dave.ants.api.properties.stored.LastAntBornTick;
-import org.dave.ants.api.properties.stored.StoredFood;
 import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.api.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
+import org.dave.ants.calculation.CalculationRegistry;
 import org.dave.ants.chambers.ChamberRegistry;
+import org.dave.ants.tiles.BaseHillTile;
 import org.dave.ants.util.DimPos;
+import org.dave.ants.util.Logz;
 import org.dave.ants.util.serialization.FieldHandlers;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class HillData extends BaseNBTSerializable {
+public class HillData extends BaseNBTSerializable implements IHillData {
     @Store
     public int hillId = -1;
 
@@ -41,6 +41,7 @@ public class HillData extends BaseNBTSerializable {
     // These are cached/calculate values and are being dynamically calculated from the chambers
     public Map<Class<? extends IHillProperty>, IHillProperty> calculatedProperties = new HashMap<>();
 
+    public Map<Class<? extends IAntChamber>, Integer> maxTierLevels = new HashMap<>();
     public List<DimPos> tickingHillChambers = new ArrayList<>();
     private boolean cacheOutdated = true;
 
@@ -52,6 +53,7 @@ public class HillData extends BaseNBTSerializable {
         cacheOutdated = true;
     }
 
+    @Override
     public <V> IHillProperty<V> getProperty(Class<? extends IHillProperty<V>> propClass) {
         Map<Class<? extends IHillProperty>, IHillProperty> mapToUse = this.calculatedProperties;
         if(HillPropertyRegistry.shouldStoreProperty(propClass)) {
@@ -73,10 +75,12 @@ public class HillData extends BaseNBTSerializable {
         return mapToUse.get(propClass);
     }
 
+    @Override
     public <V> V getPropertyValue(Class<? extends IHillProperty<V>> property) {
         return getProperty(property).getValue();
     }
 
+    @Override
     public <V> void setPropertyValue(Class<? extends IHillProperty<V>> property, V value) {
         IHillProperty<V> prop = getProperty(property);
         V toSet = prop.clamp(value);
@@ -84,6 +88,7 @@ public class HillData extends BaseNBTSerializable {
         this.markDirty();
     }
 
+    @Override
     public <V> void modifyPropertyValue(Class<? extends IHillProperty<V>> property, Function<V, V> func) {
         IHillProperty<V> prop = getProperty(property);
         V newValue;
@@ -103,11 +108,21 @@ public class HillData extends BaseNBTSerializable {
             BuyChamber buyChamberAction = (BuyChamber)action;
 
             IAntChamber chamber = ChamberRegistry.getChamberInstance(buyChamberAction.type);
-            boolean boughtSuccessfully = chamber.payPrice(this);
+            int tier = maxTierLevels.getOrDefault(buyChamberAction.type, 0);
+            Logz.info("Player '%s' is trying to buy chamber '%s' at tier: %d", player, chamber, tier);
 
-            if(!boughtSuccessfully) {
+            if(chamber.getTierList().size() <= tier || tier < 0) {
+                Logz.warn("Player '%s' tried to buy a tier level that does not exist (tier=%d, chamber=%d)!", tier, buyChamberAction.type.getName());
                 return;
             }
+
+            double cost = chamber.tierCost(tier, chamber.getTierList().get(tier));
+            if(getPropertyValue(TotalAnts.class) < cost) {
+                // TODO: Notify player that he does not have enough ants
+                return;
+            }
+
+            modifyPropertyValue(TotalAnts.class, ants -> ants - cost);
 
             ItemStack stack = ChamberRegistry.createItemStackForChamberType(buyChamberAction.type);
             if(!player.addItemStackToInventory(stack)) {
@@ -137,6 +152,7 @@ public class HillData extends BaseNBTSerializable {
         }
 
         tickingHillChambers.clear();
+        maxTierLevels.clear();
     }
 
     public NBTTagCompound getPropertiesTag() {
@@ -146,15 +162,32 @@ public class HillData extends BaseNBTSerializable {
         return result;
     }
 
+    public NBTTagCompound getMaxTierLevelsTag() {
+        NBTTagCompound result = new NBTTagCompound();
+        FieldHandlers.getNBTHandler(maxTierLevels.getClass()).getRight().write("maxTierLevels", maxTierLevels, result);
+        return result;
+    }
+
+    @Override
     public void updateHillStatistics() {
         this.resetValues();
 
         for(Map.Entry<DimPos, IAntChamber> chamberEntry : chambers.entrySet()) {
             IAntChamber chamber = chamberEntry.getValue();
-            chamber.applyHillModification(this);
+            int chamberTier = 0;
+            BaseHillTile tile = chamberEntry.getKey().getTileEntity(BaseHillTile.class);
+            if(tile != null) {
+                chamberTier = tile.getChamberTier();
+            }
+
+            chamber.applyHillModification(this, chamberTier);
             if(chamber.shouldTick()) {
                 tickingHillChambers.add(chamberEntry.getKey());
             }
+
+            // Also build up a mapping between chamber -> max level, so we can easily access that info without looping over all blocks
+            int finalChamberTier = chamberTier;
+            maxTierLevels.compute(chamber.getClass(), (aClass, integer) -> integer == null ? finalChamberTier : Math.max(integer, finalChamberTier));
         }
 
         cacheOutdated = false;
@@ -173,68 +206,10 @@ public class HillData extends BaseNBTSerializable {
             chambers.get(pos).tickPreCalc(this, pos.getWorld(), pos.getBlockPos());
         }
 
-        // TODO: Move to IGameLogicCalculation or something api foobar
-        generateFood();
-        createNewAnts();
-        eatFood();
+        CalculationRegistry.performCalculations(this, currentWorldTick);
 
         for(DimPos pos : tickingHillChambers) {
             chambers.get(pos).tickPostCalc(this, pos.getWorld(), pos.getBlockPos());
-        }
-    }
-
-    private void generateFood() {
-        double storedFood = getPropertyValue(StoredFood.class);
-        double foodGainPerTick = getPropertyValue(FoodGainPerTick.class);
-        double maxCapacity = getPropertyValue(FoodCapacity.class);
-
-        setPropertyValue(StoredFood.class, Math.min(storedFood + foodGainPerTick, maxCapacity));
-    }
-
-    private void createNewAnts() {
-        double totalAnts = getPropertyValue(TotalAnts.class);
-        double maxAnts = getPropertyValue(MaxAnts.class);
-
-        // Don't bear new babies if there is no more room
-        if(totalAnts >= maxAnts) {
-            return;
-        }
-
-        // Check if its time already
-        if(getPropertyValue(LastAntBornTick.class) + getPropertyValue(TicksBetweenBabies.class) >= currentWorldTick) {
-            return;
-        }
-
-        double requiredFood = 1000 * getPropertyValue(FoodRequirementPerAnt.class);
-        if(getPropertyValue(StoredFood.class) < requiredFood) {
-            return;
-        }
-
-        // Create one new ant per queen, but limit to maxAnts
-        long totalQueens = getPropertyValue(TotalQueens.class);
-
-
-        setPropertyValue(TotalAnts.class, Math.min(totalAnts + totalQueens, maxAnts));
-
-        // Remember when we last created ants
-        setPropertyValue(LastAntBornTick.class, currentWorldTick);
-
-        // It costs food to create new ants
-        modifyPropertyValue(StoredFood.class, storedFood -> storedFood - (storedFood * 0.1d));
-    }
-
-    private void eatFood() {
-        double totalAnts = getPropertyValue(TotalAnts.class);
-        double requirementPerAnt = getPropertyValue(FoodRequirementPerAnt.class);
-
-        double requiredFood = totalAnts * requirementPerAnt;
-
-        double storedFood = getPropertyValue(StoredFood.class);
-        double remainingFood = storedFood - requiredFood;
-        setPropertyValue(StoredFood.class, Math.max(remainingFood, 0.0d));
-
-        if(remainingFood < 0) {
-            modifyPropertyValue(TotalAnts.class, ants -> Math.max(ants - 1, 0d));
         }
     }
 }

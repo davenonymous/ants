@@ -21,4 +21,9 @@ public class EntranceHillTile extends BaseHillTile {
     public Class<? extends IAntChamber> getChamberType() {
         return EntranceChamber.class;
     }
+
+    @Override
+    public int getChamberTier() {
+        return 0;
+    }
 }

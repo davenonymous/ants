@@ -12,15 +12,17 @@ public class ChamberDataMessage implements IMessage {
     public Class<? extends IAntChamber> type;
     public NBTTagCompound chamberData;
     public NBTTagCompound properties;
+    public NBTTagCompound maxTierLevels;
     public DimPos pos;
 
     public ChamberDataMessage() {
     }
 
-    public ChamberDataMessage(Class<? extends IAntChamber> type, NBTTagCompound chamberData, NBTTagCompound properties, DimPos pos) {
+    public ChamberDataMessage(Class<? extends IAntChamber> type, NBTTagCompound chamberData, NBTTagCompound properties, NBTTagCompound maxTierLevels, DimPos pos) {
         this.type = type;
         this.chamberData = chamberData;
         this.properties = properties;
+        this.maxTierLevels = maxTierLevels;
         this.pos = pos;
     }
 
@@ -36,6 +38,7 @@ public class ChamberDataMessage implements IMessage {
         }
         this.chamberData = ByteBufUtils.readTag(buf);
         this.properties = ByteBufUtils.readTag(buf);
+        this.maxTierLevels = ByteBufUtils.readTag(buf);
     }
 
     @Override
@@ -47,5 +50,6 @@ public class ChamberDataMessage implements IMessage {
         ByteBufUtils.writeUTF8String(buf, type.getName());
         ByteBufUtils.writeTag(buf, chamberData);
         ByteBufUtils.writeTag(buf, properties);
+        ByteBufUtils.writeTag(buf, maxTierLevels);
     }
 }

@@ -15,6 +15,9 @@ public class HillItemStackData extends BaseNBTSerializable {
     @Store
     private Class<? extends IAntChamber> chamberType;
 
+    @Store
+    private int chamberTier;
+
     private NBTTagCompound chamberData;
 
     public HillItemStackData(ItemStack hillStack) {
@@ -46,6 +49,10 @@ public class HillItemStackData extends BaseNBTSerializable {
 
     public boolean hasHillId() {
         return hillId != -1;
+    }
+
+    public int getChamberTier() {
+        return chamberTier;
     }
 
     @Nullable

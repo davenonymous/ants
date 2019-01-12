@@ -1,6 +1,7 @@
 package org.dave.ants.util;
 
 import com.google.common.base.Objects;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -36,6 +37,20 @@ public class DimPos extends BaseNBTSerializable {
 
     public BlockPos getBlockPos() {
         return pos;
+    }
+
+    public <V extends TileEntity> V getTileEntity(Class<V> tileEntityClass) {
+        TileEntity tileEntity = getWorld().getTileEntity(getBlockPos());
+        if(tileEntity == null) {
+            return null;
+        }
+
+        //if(tileEntityClass.isAssignableFrom(tileEntity.getClass())) {
+        if(tileEntity.getClass().isAssignableFrom(tileEntityClass)) {
+            return null;
+        }
+
+        return (V) tileEntity;
     }
 
     public boolean isLoaded() {

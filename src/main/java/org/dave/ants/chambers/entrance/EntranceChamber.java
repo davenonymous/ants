@@ -2,10 +2,10 @@ package org.dave.ants.chambers.entrance;
 
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.chambers.IAntChamber;
+import org.dave.ants.api.properties.calculated.AntsBornPerHatching;
 import org.dave.ants.api.properties.calculated.FoodCapacity;
 import org.dave.ants.api.properties.calculated.FoodGainPerTick;
 import org.dave.ants.api.properties.calculated.MaxAnts;
-import org.dave.ants.api.properties.calculated.TotalQueens;
 import org.dave.ants.base.BaseNBTSerializable;
 import org.dave.ants.hills.HillData;
 
@@ -23,10 +23,10 @@ public class EntranceChamber extends BaseNBTSerializable implements IAntChamber 
     }
 
     @Override
-    public void applyHillModification(HillData data) {
-        data.modifyPropertyValue(TotalQueens.class, totalQueens -> totalQueens + 1);
-        data.modifyPropertyValue(MaxAnts.class, maxAnts -> maxAnts + 10);
-        data.modifyPropertyValue(FoodGainPerTick.class, foodGainPerTick -> foodGainPerTick + 0.1d);
-        data.modifyPropertyValue(FoodCapacity.class, foodCapacity -> foodCapacity + 10);
+    public void applyHillModification(HillData data, int chamberTier) {
+        data.modifyPropertyValue(AntsBornPerHatching.class, antsBorn -> antsBorn + 1);
+        data.modifyPropertyValue(MaxAnts.class, maxAnts -> maxAnts + 20);
+        data.modifyPropertyValue(FoodGainPerTick.class, foodGainPerTick -> foodGainPerTick + 0.3d);
+        data.modifyPropertyValue(FoodCapacity.class, foodCapacity -> foodCapacity + 50);
     }
 }

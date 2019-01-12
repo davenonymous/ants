@@ -4,13 +4,13 @@ import org.dave.ants.api.hill.HillProperty;
 import org.dave.ants.api.properties.BaseProperty;
 
 @HillProperty
-public class TotalQueens extends BaseProperty<Long> {
-    public TotalQueens() {
-        super(Long.class);
+public class AntsBornPerHatching extends BaseProperty<Double> {
+    public AntsBornPerHatching() {
+        super(Double.class);
     }
 
     @Override
-    public Long getDefault() {
-        return 0L;
+    public Double getDefault() {
+        return 0d;
     }
 }

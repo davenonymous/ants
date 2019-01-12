@@ -4,6 +4,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.gui.GUI;
 import org.dave.ants.api.gui.WidgetGuiContainer;
@@ -11,8 +14,11 @@ import org.dave.ants.api.gui.event.TabChangedEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetTabsPanel;
+import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.init.Blockss;
+import org.dave.ants.tiles.BaseHillTile;
+import org.dave.ants.util.Logz;
 
 import java.util.Collections;
 
@@ -24,12 +30,23 @@ public class AntHillGuiContainer extends WidgetGuiContainer {
 
     int activeTab = -1;
 
-    public AntHillGuiContainer(Container container) {
+    private World world;
+    private BlockPos pos;
+    private BaseHillTile baseHillTile;
+
+    public AntHillGuiContainer(AntHillContainer container) {
         super(container);
+        this.world = container.world;
+        this.pos = container.pos;
 
         this.xSize = WIDTH;
         this.ySize = HEIGHT;
         this.gui = instantiateGui();
+
+        TileEntity tileEntity = this.world.getTileEntity(this.pos);
+        if(tileEntity != null && tileEntity instanceof BaseHillTile) {
+            baseHillTile = (BaseHillTile) tileEntity;
+        }
     }
 
     private GUI instantiateGui() {
@@ -53,6 +70,11 @@ public class AntHillGuiContainer extends WidgetGuiContainer {
 
         this.gui.clear();
 
+        int tier = 0;
+        if(baseHillTile != null) {
+            tier = baseHillTile.getChamberTier();
+        }
+
         WidgetTabsPanel tabs = new WidgetTabsPanel();
         tabs.setX(32);
         tabs.setY(2);
@@ -75,7 +97,6 @@ public class AntHillGuiContainer extends WidgetGuiContainer {
         buildingPanel.setId("BuildingPanel");
         tabs.addPage(buildingPanel, new ItemStack(Items.EMERALD), Collections.singletonList(I18n.format("gui.ants.hill_chamber.tabs.buy.tooltip")));
 
-
         tabs.addListener(TabChangedEvent.class, (event, widget) -> {
             if(event.newValue == hillInfos) {
                 activeTab = 0;
@@ -90,7 +111,7 @@ public class AntHillGuiContainer extends WidgetGuiContainer {
 
         IAntChamber clientChamberInstance = ClientChamberGuiCache.getChamberInstance();
         if(clientChamberInstance.hasGui()) {
-            WidgetPanel chamberPanel = clientChamberInstance.createGuiPanel();
+            WidgetPanel chamberPanel = clientChamberInstance.createGuiPanel(tier);
             chamberPanel.setWidth(WIDTH);
             chamberPanel.setHeight(HEIGHT);
             chamberPanel.setX(5);

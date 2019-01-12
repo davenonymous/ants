@@ -28,9 +28,9 @@ gui.ants.hill_chamber.infos.out_of_room=Out of room!
 gui.ants.hill_chamber.infos.upgrade_first=Upgrade first!
 gui.ants.hill_chamber.infos.price=Price: %s ants
 
-gui.ants.hill_chamber.stats.total_ants.tooltip.queens=Queens: %d
+gui.ants.hill_chamber.stats.total_ants.tooltip.antsperhatching=Rate: %s
 gui.ants.hill_chamber.stats.total_ants.tooltip.interval=Interval: %s
-gui.ants.hill_chamber.stats.total_ants.tooltip.beds=Beds: %d
+
 gui.ants.hill_chamber.stats.stored_food.tooltip.eaten=- %s/s
 gui.ants.hill_chamber.stats.stored_food.tooltip.gathered=+ %s/s
 gui.ants.hill_chamber.stats.stored_food.tooltip.total== %s/s

@@ -58,8 +58,9 @@ public class HillRegistry extends BaseWorldSavedData {
         DimPos dimPos = new DimPos(world, pos);
 
         HillData hillData = getHillData(hillId);
-        result.applyHillModification(hillData);
+        result.applyHillModification(hillData, data.getChamberTier());
         hillData.chambers.put(dimPos, result);
+        hillData.maxTierLevels.compute(type, (aClass, integer) -> integer == null ? data.getChamberTier() : Math.max(integer, data.getChamberTier()));
         hillData.markDirty();
         posHillMap.put(dimPos, hillData.hillId);
         this.markDirty();

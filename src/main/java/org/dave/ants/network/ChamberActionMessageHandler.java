@@ -27,7 +27,7 @@ public class ChamberActionMessageHandler implements IMessageHandler<ChamberActio
             HillData data = Ants.savedData.hills.getHillDataByPosition(pos);
             IAntChamber chamber = data.chambers.get(pos);
             chamber.onChamberAction(player, action, data);
-            AntsNetworkHandler.instance.sendTo(new ChamberDataMessage(chamber.getClass(), chamber.serializeNBT(), data.getPropertiesTag(), pos), player);
+            AntsNetworkHandler.instance.sendTo(new ChamberDataMessage(chamber.getClass(), chamber.serializeNBT(), data.getPropertiesTag(), data.getMaxTierLevelsTag(), pos), player);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

@@ -21,6 +21,7 @@ import org.dave.ants.blocks.BaseHillBlock;
 import org.dave.ants.chambers.VoxelHandlerRegistry;
 import org.dave.ants.render.properties.UnlistedPropertyHillNeighbors;
 import org.dave.ants.util.Logz;
+import org.dave.ants.util.Tuple3;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -207,7 +208,7 @@ public class ChamberHillBakedModel implements IBakedModel {
         quads.add(createQuad(EnumFacing.SOUTH, new Vec3d(xLeft, yBottom, zBack), new Vec3d(xRight, yBottom, zBack), new Vec3d(xRight, yTop, zBack), new Vec3d(xLeft, yTop, zBack), sprite));
     }
 */
-    private static Map<Class<? extends IAntChamber>, Map<UnlistedPropertyHillNeighbors.HillNeighbors, List<BakedQuad>>> cachedQuads;
+    private static Map<Tuple3<Class<? extends IAntChamber>, Integer, UnlistedPropertyHillNeighbors.HillNeighbors>, List<BakedQuad>> tupleCachedQuads;
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
@@ -223,16 +224,16 @@ public class ChamberHillBakedModel implements IBakedModel {
             return Collections.emptyList();
         }
 
-        if(cachedQuads == null) {
-            cachedQuads = new HashMap<>();
+        if(tupleCachedQuads == null) {
+            tupleCachedQuads = new HashMap<>();
         }
 
-        if(!cachedQuads.containsKey(chamberType)) {
-            cachedQuads.put(chamberType, new HashMap<>());
-        }
+        int chamberTier = extendedBlockState.getValue(BaseHillBlock.CHAMBER_TIER);
 
         UnlistedPropertyHillNeighbors.HillNeighbors neighbors = extendedBlockState.getValue(BaseHillBlock.HILL_NEIGHBORS);
-        if(!cachedQuads.get(chamberType).containsKey(neighbors)) {
+        Tuple3<Class<? extends IAntChamber>, Integer, UnlistedPropertyHillNeighbors.HillNeighbors> thisTuple3 = new Tuple3<>(chamberType, chamberTier, neighbors);
+
+        if(!tupleCachedQuads.containsKey(thisTuple3)) {
             List<BakedQuad> quads = new ArrayList<>();
             VoxelSpace voxels = VoxelHandlerRegistry.getVoxelsForChamberType(chamberType, extendedBlockState);
 
@@ -242,10 +243,10 @@ public class ChamberHillBakedModel implements IBakedModel {
             }
 
             mostCommonTexture = voxels.getMostUsedStateTexture();
-            cachedQuads.get(chamberType).put(neighbors, quads);
+            tupleCachedQuads.put(thisTuple3, quads);
         }
 
-        return cachedQuads.get(chamberType).get(neighbors);
+        return tupleCachedQuads.get(thisTuple3);
     }
 
     @Override

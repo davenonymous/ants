@@ -29,20 +29,22 @@ public class UnlistedPropertyHillNeighbors implements IUnlistedProperty<Unlisted
     }
 
     public enum EnumNeighborDirections {
-        NORTH(new Vec3i(0, 0, -1)),
-        NORTHEAST(new Vec3i(1, 0, -1)),
-        EAST(new Vec3i(1, 0, 0)),
-        SOUTHEAST(new Vec3i(1, 0, 1)),
-        SOUTH(new Vec3i(0, 0, 1)),
-        SOUTHWEST(new Vec3i(-1, 0, 1)),
-        WEST(new Vec3i(-1, 0, 0)),
-        NORTHWEST(new Vec3i(-1, 0, -1)),
-        UP(new Vec3i(0, 1, 0)),
-        DOWN(new Vec3i(0, -1, 0));
+        NORTH(new Vec3i(0, 0, -1),"n"),
+        NORTHEAST(new Vec3i(1, 0, -1),"ne"),
+        EAST(new Vec3i(1, 0, 0),"e"),
+        SOUTHEAST(new Vec3i(1, 0, 1),"se"),
+        SOUTH(new Vec3i(0, 0, 1),"s"),
+        SOUTHWEST(new Vec3i(-1, 0, 1),"sw"),
+        WEST(new Vec3i(-1, 0, 0),"w"),
+        NORTHWEST(new Vec3i(-1, 0, -1),"nw"),
+        UP(new Vec3i(0, 1, 0),"u"),
+        DOWN(new Vec3i(0, -1, 0),"d");
 
         private final Vec3i directionVec;
-        EnumNeighborDirections(Vec3i directionVec) {
+        private final String shortName;
+        EnumNeighborDirections(Vec3i directionVec, String shortName) {
             this.directionVec = directionVec;
+            this.shortName = shortName;
         }
 
         public Vec3i getDirectionVec() {
@@ -51,6 +53,10 @@ public class UnlistedPropertyHillNeighbors implements IUnlistedProperty<Unlisted
 
         public BlockPos offset(BlockPos pos) {
             return pos.add(this.directionVec);
+        }
+
+        public String getShortName() {
+            return shortName;
         }
     }
 
@@ -75,11 +81,18 @@ public class UnlistedPropertyHillNeighbors implements IUnlistedProperty<Unlisted
         public String toString() {
             StringBuilder builder = new StringBuilder("NeighborHeights[");
             for(Map.Entry<EnumNeighborDirections, Integer> entry : neighborHeights.entrySet()) {
-                if(entry.getValue() == 0) {
+                if(entry.getValue() <= 0) {
                     continue;
                 }
 
-                builder.append(String.format("[%s=%d]", entry.getKey().name(), entry.getValue()));
+                if(entry.getValue() == 1) {
+                    builder.append(entry.getKey().getShortName().toLowerCase());
+                } else {
+                    builder.append(entry.getKey().getShortName().toUpperCase());
+                }
+
+                builder.append(',');
+                //builder.append(String.format("[%s=%d]", entry.getKey().name(), entry.getValue()));
             }
             builder.append(']');
 

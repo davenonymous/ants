@@ -99,6 +99,7 @@ public class ChamberHillBlock extends BaseHillBlock implements ITileEntityProvid
 
         ChamberHillTile hillTile = getChamberHillTileEntity(world, pos);
         hillTile.setChamberType(hillStackData.getChamberType());
+        hillTile.setChamberTier(hillStackData.getChamberTier());
         world.markBlockRangeForRenderUpdate(pos, pos);
     }
 
@@ -153,6 +154,7 @@ public class ChamberHillBlock extends BaseHillBlock implements ITileEntityProvid
         hillRegistry.addNewChamber(world, pos, newHillId, hillStackData.getChamberType(), hillStackData);
         ChamberHillTile hillTile = getChamberHillTileEntity(world, pos);
         hillTile.setChamberType(hillStackData.getChamberType());
+        hillTile.setChamberTier(hillStackData.getChamberTier());
         hillTile.setHillId(newHillId);
         hillTile.markDirty();
     }

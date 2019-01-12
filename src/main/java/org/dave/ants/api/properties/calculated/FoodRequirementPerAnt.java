@@ -5,7 +5,7 @@ import org.dave.ants.api.properties.BaseProperty;
 
 @HillProperty
 public class FoodRequirementPerAnt extends BaseProperty<Double> {
-    public static double baseFoodRequirementPerAnt = 0.005d;
+    public static double baseFoodRequirementPerAnt = 0.02d;
 
     public FoodRequirementPerAnt() {
         super(Double.class);

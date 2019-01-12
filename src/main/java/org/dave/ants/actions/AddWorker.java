@@ -4,12 +4,12 @@ import org.dave.ants.api.serialization.Store;
 
 public class AddWorker extends BaseAction {
     @Store
-    public int count;
+    public double count;
 
     public AddWorker() {
     }
 
-    public AddWorker(int count) {
+    public AddWorker(double count) {
         this.count = count;
     }
 }

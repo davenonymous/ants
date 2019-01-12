@@ -27,7 +27,7 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
      *
      * @return maximum number of upgrades.
      */
-    public abstract int getMaxUpgrades();
+    public abstract double getMaxUpgrades();
 
     /**
      * Base price for the first upgrade that can be bought.
@@ -46,6 +46,7 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
      * @return
      */
     public abstract double getUpgradePriceMultiplier();
+
 
     public double getUpgradePrice() {
         return Math.ceil(getBaseUpgradePrice() * Math.pow(getUpgradePriceMultiplier(), upgrades));

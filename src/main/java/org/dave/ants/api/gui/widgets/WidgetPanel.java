@@ -25,7 +25,6 @@ public class WidgetPanel extends Widget {
 
         // Pass mouse move events along to the children, shift positions accordingly
         // Also notify widgets when the mouse entered or exited their area
-        // TODO: Move to methods, i.e. this.addListener(MouseMoveEvent.class, (event, widget) -> widget.onMouseMove(event.x, event.y));
         this.addListener(MouseMoveEvent.class, (event, widget)-> {
 
             //Logz.info("[%s] Moved mouse to x=%d, y=%d", widget.id, innerX, innerY);

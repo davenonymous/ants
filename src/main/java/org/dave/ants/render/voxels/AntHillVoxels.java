@@ -3,22 +3,23 @@ package org.dave.ants.render.voxels;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import org.dave.ants.api.chambers.AntChamberVoxelHandler;
+import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IAntChamberVoxelHandler;
 import org.dave.ants.api.render.IVoxelSpace;
-import org.dave.ants.api.chambers.AntChamberVoxelHandler;
 import org.dave.ants.blocks.BaseHillBlock;
-import org.dave.ants.render.properties.UnlistedPropertyHillNeighbors;
+import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.render.VoxelSpaceTools;
+import org.dave.ants.render.properties.UnlistedPropertyHillNeighbors;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.List;
 
 @AntChamberVoxelHandler(antChamberType = Class.class)
 public class AntHillVoxels implements IAntChamberVoxelHandler {
-    private static final Color[] COLOR_BY_HEIGHT = new Color[] { Color.WHITE, Color.GRAY, Color.BLACK };
-
-    private static final IBlockState DIRT = Blocks.DIRT.getDefaultState();
 
     @Override
     public int renderPriority() {
@@ -29,9 +30,24 @@ public class AntHillVoxels implements IAntChamberVoxelHandler {
     public void addVoxels(IVoxelSpace voxels, IExtendedBlockState extendedBlockState) {
         UnlistedPropertyHillNeighbors.HillNeighbors neighbors = extendedBlockState.getValue(BaseHillBlock.HILL_NEIGHBORS);
 
+
+        List<IBlockState> tierList = Collections.EMPTY_LIST;
+        Class<? extends IAntChamber> chamberType = extendedBlockState.getValue(BaseHillBlock.CHAMBER_TYPE);
+        IAntChamber chamber = ChamberRegistry.getChamberInstance(chamberType);
+        if(chamber != null && chamber.getTierList().size() > 0) {
+            tierList = chamber.getTierList();
+        }
+
+        int tier = extendedBlockState.getValue(BaseHillBlock.CHAMBER_TIER);
+
+        IBlockState blockState = Blocks.DIRT.getDefaultState();
+        if(tier > 0 && tier < tierList.size()) {
+            blockState = tierList.get(tier);
+        }
+
         if(neighbors.up() > 0) {
             // Full block
-            VoxelSpaceTools.hollowBlock(voxels, 0, 0, 0, voxels.getDimension(), voxels.getDimension(), voxels.getDimension(), Blocks.DIRT.getDefaultState());
+            VoxelSpaceTools.hollowBlock(voxels, 0, 0, 0, voxels.getDimension(), voxels.getDimension(), voxels.getDimension(), blockState);
             return;
         }
 
@@ -95,7 +111,7 @@ public class AntHillVoxels implements IAntChamberVoxelHandler {
 
                 int height = voxels.getDimension() - (rawHeight / voxels.getDimension()) - 1;
                 for(int y = 0; y < height; y++) {
-                    voxels.setVoxel(x, y, z, DIRT);
+                    voxels.setVoxel(x, y, z, blockState);
                 }
             }
         }

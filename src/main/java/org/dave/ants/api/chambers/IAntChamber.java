@@ -1,5 +1,6 @@
 package org.dave.ants.api.chambers;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -7,6 +8,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.hills.HillData;
+
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -25,11 +29,37 @@ import org.dave.ants.hills.HillData;
  */
 public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
     /**
+     * Return a list of tiers this chamber can be upgraded too.
+     * You might want to follow the official blocks or change it up
+     * completely.
+     *
+     * If you return an empty list, no tier upgrades will be possible
+     * and Dirt will be set as default IBlockState for the first tier.
+     *
+     * @return a list containing the blockstates representing the tier
+     *         of the chamber at the given level/list index.
+     */
+    default List<IBlockState> getTierList() {
+        return Collections.emptyList();
+    }
+
+
+    /**
+     * Return the price a specific tier upgrades costs (in ants).
+     * It is guaranteed for the tier to be a valid tier, otherwise this method
+     * will not get called in the first place.
+     *
+     * @param tier  The tier the chamber is currently at
+     * @param state And the blockstate representing that tier
+     * @return The price to upgrade to this tier/to buy the first tier
+     */
+    default double tierCost(int tier, IBlockState state) {
+        return 15.0d;
+    }
+
+    /**
      * If this chamber should be buyable in the Hill Store(tm) you need to
-     * return true and implement the corresponding methods:
-     *   - canBeBought()
-     *   - payPrice()
-     *   - priceDescription()
+     * return true here.
      *
      * This value can change over time and is being queried everytime the
      * store is being opened. This means you can limit the visibility of
@@ -44,46 +74,6 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
     }
 
 
-    /**
-     * Whether or not the hill has enough resources to buy this chamber.
-     * Make sure to use the same values as in payPrice()!
-     *
-     * This is called on the client side and used mainly to enable/disable
-     * the buy button for this chamber.
-     *
-     * @return whether the hill can afford the chamber
-     */
-    default boolean canBeBought() {
-        return false;
-    }
-
-    /**
-     * Check whether it can be bought again on the live server data, then apply your
-     * custom price to the hilldata structure.
-     * You probably want to subtract some value from {@link org.dave.ants.api.properties.stored.TotalAnts}.
-     * The return value determines whether or not the player should receive the stack,
-     * i.e. if the price could not be matched, return false or the player gets a gift.
-     *
-     * This is called on the server.
-     *
-     * @param hillData Data structure the Ant hill operates on. Can be modified freely.
-     * @return Return false if there were not enough resources to buy this chamber.
-     */
-    default boolean payPrice(HillData hillData) {
-        return false;
-    }
-
-    /**
-     * This should return a small description of the price this chamber costs.
-     * Is only used in the store tooltip at the moment.
-     *
-     * This is called on the client.
-     *
-     * @return
-     */
-    default String priceDescription() {
-        return "";
-    }
 
     /**
      * This should return a short, static, localized description for this chamber
@@ -114,8 +104,9 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      * interface.
      *
      * @param data Data structure the Ant hill operates on. Can be modified freely.
+     * @param chamberTier
      */
-    void applyHillModification(HillData data);
+    void applyHillModification(HillData data, int chamberTier);
 
 
 
@@ -123,7 +114,7 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      * Return true in this method if you need to do custom stuff each tick.
      * Only use this for world interaction stuff, everything else should get an
      * appropriate "gain" IHillProperty created and its interaction calculated in
-     * a custom TODO: IGameTickCalculation.
+     * a custom {@link org.dave.ants.api.calculation.IAntCalculation}.
      *
      * I repeat: If you are dealing only with values pertaining to the ant hill
      * this chamber is in, you do not want to use ticking chambers, but implementations
@@ -199,9 +190,11 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      *
      * Only called on the client.
      *
+     * @param tier The current tier this chamber is at.
+     *
      * @return A WidgetPanel that is being shown to the client opening your GUI
      */
-    default WidgetPanel createGuiPanel() {
+    default WidgetPanel createGuiPanel(int tier) {
         return null;
     }
 

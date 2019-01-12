@@ -4,15 +4,12 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import org.dave.ants.api.gui.event.*;
-import org.dave.ants.util.Logz;
-
 
 import java.io.IOException;
 
 public abstract class WidgetGuiContainer extends GuiContainer {
     protected GUI gui;
 
-    // TODO: Move inside GUI class
     private int previousMouseX = Integer.MAX_VALUE;
     private int previousMouseY = Integer.MAX_VALUE;
 
@@ -28,7 +25,6 @@ public abstract class WidgetGuiContainer extends GuiContainer {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        // TODO: We need event cancelling etc
         if(gui.fireEvent(new KeyTypedEvent(typedChar, keyCode)) == WidgetEventResult.CONTINUE_PROCESSING) {
             super.keyTyped(typedChar, keyCode);
         }

@@ -10,12 +10,8 @@ import org.dave.ants.api.gui.widgets.Widget;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.gui.GUIHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class GUI extends WidgetPanel {
-    // TODO: Add auto centering constructor, i.e. without x and y
     private static ResourceLocation tabIcons;
 
     public boolean hasTabs = false;

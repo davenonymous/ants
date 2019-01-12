@@ -1,16 +1,18 @@
 package org.dave.ants.chambers.storage;
 
 import com.google.common.math.LongMath;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetTextBox;
 import org.dave.ants.api.properties.calculated.FoodCapacity;
-import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.chambers.UpgradeableChamber;
-import org.dave.ants.gui.ClientChamberGuiCache;
+import org.dave.ants.config.GeneralAntHillConfig;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
+
+import java.util.List;
 
 @AntChamber
 public class StorageChamber extends UpgradeableChamber {
@@ -18,9 +20,13 @@ public class StorageChamber extends UpgradeableChamber {
     public static double priceToBuy = 10.0d;
 
     // Upgrade-Options
-    public static int maxUpgrades = 15;
+    public static int maxUpgrades = 100;
     public static double baseUpgradePrice = 10.0d;
     public static double upgradePriceMultiplier = 1.09d;
+
+    // Tier-Scaling options
+    public static double baseFoodCrates = 1000;
+
 
     @Override
     public String description() {
@@ -32,30 +38,15 @@ public class StorageChamber extends UpgradeableChamber {
         return true;
     }
 
-    @Override
-    public String priceDescription() {
-        return I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(priceToBuy));
-    }
 
     @Override
-    public boolean canBeBought() {
-        return ClientChamberGuiCache.getPropertyValue(TotalAnts.class) >= priceToBuy;
+    public void applyHillModification(HillData data, int chamberTier) {
+        double baseValue = baseFoodCrates * GeneralAntHillConfig.defaultTierIncomeRate.get(chamberTier);
+        double totalBeds = baseValue * Math.pow(GeneralAntHillConfig.defaultUpgradeMultiplier, upgrades);
+
+        data.modifyPropertyValue(FoodCapacity.class, fc -> fc + totalBeds);
     }
 
-    @Override
-    public boolean payPrice(HillData hillData) {
-        if(hillData.getPropertyValue(TotalAnts.class) < priceToBuy) {
-            return false;
-        }
-
-        hillData.modifyPropertyValue(TotalAnts.class, ants -> ants - priceToBuy);
-        return true;
-    }
-
-    @Override
-    public void applyHillModification(HillData data) {
-        data.modifyPropertyValue(FoodCapacity.class, fc -> fc + LongMath.pow(10, upgrades+2));
-    }
 
     @Override
     public boolean hasGui() {
@@ -63,7 +54,7 @@ public class StorageChamber extends UpgradeableChamber {
     }
 
     @Override
-    public WidgetPanel createGuiPanel() {
+    public WidgetPanel createGuiPanel(int tier) {
         WidgetPanel storagePanel = new WidgetPanel();
         storagePanel.add(getUpgradeBar());
 
@@ -79,8 +70,20 @@ public class StorageChamber extends UpgradeableChamber {
         return storagePanel;
     }
 
+
     @Override
-    public int getMaxUpgrades() {
+    public List<IBlockState> getTierList() {
+        return GeneralAntHillConfig.defaultTierList;
+    }
+
+    @Override
+    public double tierCost(int tier, IBlockState state) {
+        return GeneralAntHillConfig.defaultTierCost.get(tier) * 2;
+    }
+
+
+    @Override
+    public double getMaxUpgrades() {
         return maxUpgrades;
     }
 
@@ -93,6 +96,7 @@ public class StorageChamber extends UpgradeableChamber {
     public double getUpgradePriceMultiplier() {
         return upgradePriceMultiplier;
     }
+
 
     @Override
     public int antFillingColorTint() {

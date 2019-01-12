@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import org.dave.ants.calculation.CalculationRegistry;
 import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.compat.CompatHandler;
 import org.dave.ants.config.ConfigurationHandler;
@@ -18,6 +19,8 @@ import org.dave.ants.proxy.CommonProxy;
 import org.dave.ants.chambers.VoxelHandlerRegistry;
 import org.dave.ants.util.AnnotatedInstanceUtil;
 import org.dave.ants.util.Logz;
+
+import java.util.concurrent.Callable;
 
 @Mod(
         modid = Ants.MODID,
@@ -48,6 +51,7 @@ public class Ants {
 
         HillPropertyRegistry.findHillProperties();
         ChamberRegistry.findChamberIntegrations();
+        CalculationRegistry.loadAntCalculations();
         VoxelHandlerRegistry.instantiateVoxelHandlers();
 
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());

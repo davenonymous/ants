@@ -30,6 +30,8 @@ public abstract class BaseHillTile extends BaseTileEntity {
 
     public abstract Class<? extends IAntChamber> getChamberType();
 
+    public abstract int getChamberTier();
+
     @Override
     protected NBTTagCompound createItemStackTagCompound() {
         NBTTagCompound result = super.createItemStackTagCompound();

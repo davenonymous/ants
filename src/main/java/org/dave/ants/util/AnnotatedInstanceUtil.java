@@ -2,6 +2,8 @@ package org.dave.ants.util;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import org.dave.ants.api.calculation.AntCalculation;
+import org.dave.ants.api.calculation.IAntCalculation;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IAntChamberVoxelHandler;
@@ -18,8 +20,8 @@ public class AnnotatedInstanceUtil {
     private AnnotatedInstanceUtil() {
     }
 
-    public static List<IAntChamber> getAntChamberIntegrations() {
-        return getInstances(AntChamber.class, IAntChamber.class);
+    public static List<IAntCalculation> getAntCalculations() {
+        return getInstances(AntCalculation.class, IAntCalculation.class);
     }
 
     public static Map<IAntChamberVoxelHandler, Map<String, Object>> getVoxelHandlers() {

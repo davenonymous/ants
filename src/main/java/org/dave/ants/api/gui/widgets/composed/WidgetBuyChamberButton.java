@@ -22,11 +22,6 @@ public class WidgetBuyChamberButton extends WidgetButton {
         this.setWidth(50);
         this.setHeight(40);
         this.addTooltipLine(chamber.description());
-
-        String priceDescription = chamber.priceDescription();
-        if(priceDescription != null && priceDescription.length() > 0) {
-            this.addTooltipLine(priceDescription);
-        }
     }
 
     @Override
@@ -40,6 +35,5 @@ public class WidgetBuyChamberButton extends WidgetButton {
     protected void drawString(GuiScreen screen, FontRenderer renderer) {
         int color = 0xEEEEEE;
         GUIHelper.drawSplitStringCentered(unlocalizedLabel, screen, 2, 18, width-4, color);
-        //renderer.drawSplitString(unlocalizedLabel, 2, 18, width-4, color);
     }
 }
