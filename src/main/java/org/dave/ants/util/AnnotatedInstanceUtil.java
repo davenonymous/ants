@@ -2,14 +2,16 @@ package org.dave.ants.util;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import org.dave.ants.api.AntPlugin;
+import org.dave.ants.api.IAntPlugin;
 import org.dave.ants.api.calculation.AntCalculation;
 import org.dave.ants.api.calculation.IAntCalculation;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IAntChamberVoxelHandler;
 import org.dave.ants.api.chambers.AntChamberVoxelHandler;
-import org.dave.ants.api.hill.HillProperty;
-import org.dave.ants.api.hill.IHillProperty;
+import org.dave.ants.api.properties.HillProperty;
+import org.dave.ants.api.properties.IHillProperty;
 
 
 import java.util.*;
@@ -18,6 +20,10 @@ public class AnnotatedInstanceUtil {
     public static ASMDataTable asmDataTable;
 
     private AnnotatedInstanceUtil() {
+    }
+
+    public static List<IAntPlugin> getAntPlugins() {
+        return getInstances(AntPlugin.class, IAntPlugin.class);
     }
 
     public static List<IAntCalculation> getAntCalculations() {

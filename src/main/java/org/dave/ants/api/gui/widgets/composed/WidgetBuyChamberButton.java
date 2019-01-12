@@ -3,9 +3,10 @@ package org.dave.ants.api.gui.widgets.composed;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.gui.widgets.WidgetButton;
-import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.gui.GUIHelper;
 
 public class WidgetBuyChamberButton extends WidgetButton {
@@ -28,7 +29,7 @@ public class WidgetBuyChamberButton extends WidgetButton {
     protected void drawButtonContent(GuiScreen screen, FontRenderer renderer) {
         super.drawButtonContent(screen, renderer);
 
-        screen.mc.getRenderItem().renderItemAndEffectIntoGUI(ChamberRegistry.createItemStackForChamberType(this.chamber.getClass()), (width - 16) / 2, 3 );
+        screen.mc.getRenderItem().renderItemAndEffectIntoGUI(Ants.chamberTypes.createItemStackForChamberType(this.chamber.getClass()), (width - 16) / 2, 3 );
     }
 
     @Override

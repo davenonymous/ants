@@ -3,12 +3,13 @@ package org.dave.ants.render.voxels;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamberVoxelHandler;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IAntChamberVoxelHandler;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.render.IVoxelSpace;
 import org.dave.ants.blocks.BaseHillBlock;
-import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.render.VoxelSpaceTools;
 import org.dave.ants.render.properties.UnlistedPropertyHillNeighbors;
 
@@ -33,7 +34,7 @@ public class AntHillVoxels implements IAntChamberVoxelHandler {
 
         List<IBlockState> tierList = Collections.EMPTY_LIST;
         Class<? extends IAntChamber> chamberType = extendedBlockState.getValue(BaseHillBlock.CHAMBER_TYPE);
-        IAntChamber chamber = ChamberRegistry.getChamberInstance(chamberType);
+        IAntChamber chamber = Ants.chamberTypes.getChamberInstance(chamberType);
         if(chamber != null && chamber.getTierList().size() > 0) {
             tierList = chamber.getTierList();
         }

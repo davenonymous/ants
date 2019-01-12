@@ -5,16 +5,17 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import org.dave.ants.Ants;
 import org.dave.ants.actions.BuyChamber;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.chambers.IChamberAction;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.hill.IHillData;
-import org.dave.ants.api.hill.IHillProperty;
+import org.dave.ants.api.properties.IHillProperty;
 import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.api.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
 import org.dave.ants.calculation.CalculationRegistry;
-import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.tiles.BaseHillTile;
 import org.dave.ants.util.DimPos;
 import org.dave.ants.util.Logz;
@@ -56,7 +57,7 @@ public class HillData extends BaseNBTSerializable implements IHillData {
     @Override
     public <V> IHillProperty<V> getProperty(Class<? extends IHillProperty<V>> propClass) {
         Map<Class<? extends IHillProperty>, IHillProperty> mapToUse = this.calculatedProperties;
-        if(HillPropertyRegistry.shouldStoreProperty(propClass)) {
+        if(Ants.hillProperties.shouldStoreProperty(propClass)) {
             mapToUse = this.properties;
         }
 
@@ -107,12 +108,16 @@ public class HillData extends BaseNBTSerializable implements IHillData {
         if(action instanceof BuyChamber) {
             BuyChamber buyChamberAction = (BuyChamber)action;
 
-            IAntChamber chamber = ChamberRegistry.getChamberInstance(buyChamberAction.type);
+            IAntChamber chamber = Ants.chamberTypes.getChamberInstance(buyChamberAction.type);
+            if(chamber == null) {
+                Logz.warn("Player '%s' tried to buy a chamber that does not exist (chamber=%s)!", buyChamberAction.type.getName());
+                return;
+            }
+
             int tier = maxTierLevels.getOrDefault(buyChamberAction.type, 0);
-            Logz.info("Player '%s' is trying to buy chamber '%s' at tier: %d", player, chamber, tier);
 
             if(chamber.getTierList().size() <= tier || tier < 0) {
-                Logz.warn("Player '%s' tried to buy a tier level that does not exist (tier=%d, chamber=%d)!", tier, buyChamberAction.type.getName());
+                Logz.warn("Player '%s' tried to buy a tier level that does not exist (tier=%d, chamber=%s)!", tier, buyChamberAction.type.getName());
                 return;
             }
 
@@ -124,7 +129,7 @@ public class HillData extends BaseNBTSerializable implements IHillData {
 
             modifyPropertyValue(TotalAnts.class, ants -> ants - cost);
 
-            ItemStack stack = ChamberRegistry.createItemStackForChamberType(buyChamberAction.type);
+            ItemStack stack = Ants.chamberTypes.createItemStackForChamberType(buyChamberAction.type);
             if(!player.addItemStackToInventory(stack)) {
                 EntityItem entityItem = new EntityItem(player.world, player.posX, player.posY + 0.5f, player.posZ, stack);
                 entityItem.lifespan = 1200;
@@ -139,12 +144,13 @@ public class HillData extends BaseNBTSerializable implements IHillData {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void resetValues() {
-        for(Class propClass : HillPropertyRegistry.getHillProperties()) {
+        for(Class propClass : Ants.hillProperties.getHillProperties()) {
             IHillProperty property = getProperty(propClass);
 
             // Do not overwrite stored properties, they are not being dynamically calculated
-            if(HillPropertyRegistry.shouldStoreProperty(propClass)) {
+            if(Ants.hillProperties.shouldStoreProperty(propClass)) {
                 continue;
             }
 
@@ -155,6 +161,8 @@ public class HillData extends BaseNBTSerializable implements IHillData {
         maxTierLevels.clear();
     }
 
+
+    @SuppressWarnings("unchecked")
     public NBTTagCompound getPropertiesTag() {
         NBTTagCompound result = new NBTTagCompound();
         FieldHandlers.getNBTHandler(properties.getClass()).getRight().write("properties", properties, result);
@@ -162,6 +170,8 @@ public class HillData extends BaseNBTSerializable implements IHillData {
         return result;
     }
 
+
+    @SuppressWarnings("unchecked")
     public NBTTagCompound getMaxTierLevelsTag() {
         NBTTagCompound result = new NBTTagCompound();
         FieldHandlers.getNBTHandler(maxTierLevels.getClass()).getRight().write("maxTierLevels", maxTierLevels, result);
@@ -206,7 +216,7 @@ public class HillData extends BaseNBTSerializable implements IHillData {
             chambers.get(pos).tickPreCalc(this, pos.getWorld(), pos.getBlockPos());
         }
 
-        CalculationRegistry.performCalculations(this, currentWorldTick);
+        Ants.calculations.performCalculations(this, currentWorldTick);
 
         for(DimPos pos : tickingHillChambers) {
             chambers.get(pos).tickPostCalc(this, pos.getWorld(), pos.getBlockPos());

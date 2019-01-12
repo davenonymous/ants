@@ -5,20 +5,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
+import org.dave.ants.Ants;
 import org.dave.ants.actions.ActionRegistry;
 import org.dave.ants.actions.BuyChamber;
 import org.dave.ants.api.chambers.IAntChamber;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetTable;
 import org.dave.ants.api.gui.widgets.composed.WidgetBuyChamberButton;
 import org.dave.ants.api.gui.widgets.composed.WidgetLabeledProgressBar;
-import org.dave.ants.api.hill.IHillProperty;
+import org.dave.ants.api.properties.IHillProperty;
 import org.dave.ants.api.properties.calculated.*;
 import org.dave.ants.api.properties.stored.StoredFood;
 import org.dave.ants.api.properties.stored.TotalAnts;
-import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.chambers.entrance.EntranceChamber;
 import org.dave.ants.util.DimPos;
 import org.dave.ants.util.SmartNumberFormatter;
@@ -26,6 +27,7 @@ import org.dave.ants.util.SmartNumberFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: This needs to be less static, so we can pass it around in our API
 public class ClientChamberGuiCache {
     public static Class<? extends IAntChamber> chamberType;
     public static NBTTagCompound chamberData;
@@ -100,12 +102,12 @@ public class ClientChamberGuiCache {
 
         int columns = 3;
         int pos = 0;
-        for(Class<? extends IAntChamber> type : ChamberRegistry.getChamberTypes()) {
+        for(Class<? extends IAntChamber> type : Ants.chamberTypes.getChamberTypes()) {
             if(type == EntranceChamber.class) {
                 continue;
             }
 
-            IAntChamber chamber = ChamberRegistry.getChamberInstance(type);
+            IAntChamber chamber = Ants.chamberTypes.getChamberInstance(type);
             WidgetBuyChamberButton button = new WidgetBuyChamberButton(chamber);
 
             int nextTier = ClientChamberGuiCache.maxTierLevel.getOrDefault(type, -1) + 1;

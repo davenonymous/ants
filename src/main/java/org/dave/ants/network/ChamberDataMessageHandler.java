@@ -3,10 +3,8 @@ package org.dave.ants.network;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.hill.IHillProperty;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.IHillProperty;
 import org.dave.ants.gui.ClientChamberGuiCache;
-import org.dave.ants.util.Logz;
 import org.dave.ants.util.serialization.FieldHandlers;
 
 import java.util.Map;

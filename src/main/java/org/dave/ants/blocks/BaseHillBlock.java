@@ -119,11 +119,13 @@ public class BaseHillBlock extends BaseBlock implements ITopInfoProvider {
         return extendedBlockState;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

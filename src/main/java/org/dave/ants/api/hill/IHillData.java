@@ -1,5 +1,7 @@
 package org.dave.ants.api.hill;
 
+import org.dave.ants.api.properties.IHillProperty;
+
 import java.util.function.Function;
 
 /**

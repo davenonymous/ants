@@ -235,7 +235,7 @@ public class ChamberHillBakedModel implements IBakedModel {
 
         if(!tupleCachedQuads.containsKey(thisTuple3)) {
             List<BakedQuad> quads = new ArrayList<>();
-            VoxelSpace voxels = VoxelHandlerRegistry.getVoxelsForChamberType(chamberType, extendedBlockState);
+            VoxelSpace voxels = Ants.voxelHandlers.getVoxelsForChamberType(chamberType, extendedBlockState);
 
             for(Map.Entry<BlockPos, Set<EnumFacing>> entry : voxels.faceMap.entrySet()) {
                 IBlockState voxelState = voxels.getVoxels().get(entry.getKey());

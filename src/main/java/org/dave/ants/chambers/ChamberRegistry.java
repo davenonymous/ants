@@ -3,6 +3,7 @@ package org.dave.ants.chambers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.dave.ants.api.chambers.IAntChamber;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.config.GeneralAntHillConfig;
 import org.dave.ants.hills.HillItemStackData;
 import org.dave.ants.init.Blockss;
@@ -15,10 +16,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ChamberRegistry {
-    private static Set<Class<? extends IAntChamber>> chamberTypes;
+public class ChamberRegistry implements IChamberRegistry {
+    private Set<Class<? extends IAntChamber>> chamberTypes;
 
-    public static void findChamberIntegrations() {
+    public void findChamberIntegrations() {
         chamberTypes = new HashSet<>();
 
         List<String> disabledChambers = Arrays.asList(GeneralAntHillConfig.disabledChambers);
@@ -31,7 +32,17 @@ public class ChamberRegistry {
         }
     }
 
-    public static ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType) {
+    @Override
+    public void registerChamberType(Class<? extends IAntChamber> chamberType) {
+        if(Arrays.asList(GeneralAntHillConfig.disabledChambers).contains(chamberType.getName())) {
+            return;
+        }
+
+        chamberTypes.add(chamberType);
+    }
+
+    @Override
+    public ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType) {
         ItemStack stack = new ItemStack(Blockss.chamber, 1, 0);
         NBTTagCompound tagCompound = new NBTTagCompound();
         tagCompound.setString("chamberType", chamberType.getName());
@@ -40,8 +51,9 @@ public class ChamberRegistry {
         return stack;
     }
 
+    @Override
     @Nullable
-    public static IAntChamber getChamberInstance(@Nonnull HillItemStackData data) {
+    public IAntChamber getChamberInstance(@Nonnull HillItemStackData data) {
         try {
             IAntChamber result = data.getChamberType().newInstance();
             if(data.hasChamberData()) {
@@ -58,13 +70,15 @@ public class ChamberRegistry {
         return null;
     }
 
+    @Override
     @Nullable
-    public static IAntChamber getChamberInstance(Class<? extends IAntChamber> type) {
+    public IAntChamber getChamberInstance(Class<? extends IAntChamber> type) {
         return getChamberInstance(type, null);
     }
 
+    @Override
     @Nullable
-    public static IAntChamber getChamberInstance(Class<? extends IAntChamber> type, @Nullable HillItemStackData data) {
+    public IAntChamber getChamberInstance(Class<? extends IAntChamber> type, @Nullable HillItemStackData data) {
         try {
             IAntChamber result = type.newInstance();
             if(data != null && data.hasChamberData()) {
@@ -81,10 +95,8 @@ public class ChamberRegistry {
         return null;
     }
 
-
-    // TODO: Add a way to register new chambers without annotations, so e.g. crafttweaker can do stuff
-
-    public static Set<Class<? extends IAntChamber>> getChamberTypes() {
+    @Override
+    public Set<Class<? extends IAntChamber>> getChamberTypes() {
         return chamberTypes;
     }
 }

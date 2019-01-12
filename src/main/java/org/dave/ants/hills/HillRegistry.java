@@ -2,10 +2,12 @@ package org.dave.ants.hills;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
+import org.dave.ants.api.chambers.IChamberRegistry;
+import org.dave.ants.api.hill.IHillRegistry;
 import org.dave.ants.api.serialization.Store;
 import org.dave.ants.base.BaseWorldSavedData;
-import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.util.DimPos;
 import org.dave.ants.util.Logz;
 
@@ -14,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HillRegistry extends BaseWorldSavedData {
+public class HillRegistry extends BaseWorldSavedData implements IHillRegistry {
     @Store
     public int nextHillId = 0;
 
@@ -50,7 +52,7 @@ public class HillRegistry extends BaseWorldSavedData {
 
     @Nullable
     public IAntChamber addNewChamber(World world, BlockPos pos, int hillId, Class<? extends IAntChamber> type, @Nonnull HillItemStackData data) {
-        IAntChamber result = ChamberRegistry.getChamberInstance(type, data);
+        IAntChamber result = Ants.chamberTypes.getChamberInstance(type, data);
         if(result == null) {
             return result;
         }
@@ -90,6 +92,7 @@ public class HillRegistry extends BaseWorldSavedData {
         return result;
     }
 
+    @Override
     @Nullable
     public HillData getHillData(int id) {
         if(id > nextHillId) {
@@ -108,10 +111,12 @@ public class HillRegistry extends BaseWorldSavedData {
         return hillDataMap.get(id);
     }
 
+    @Override
     public HillData getHillDataByPosition(World world, BlockPos pos) {
         return getHillDataByPosition(new DimPos(world, pos));
     }
 
+    @Override
     @Nullable
     public HillData getHillDataByPosition(DimPos pos) {
         if(!posHillMap.containsKey(pos)) {

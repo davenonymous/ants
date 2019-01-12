@@ -11,6 +11,7 @@ public class GeneralAntHillConfig {
 
     public static String[] disabledChambers = new String[] {};
     public static String[] disabledHillProperties = new String[] {};
+    public static String[] disabledPlugins = new String[] {};
 
     public static List<IBlockState> defaultTierList = Arrays.asList(
             Blocks.DIRT.getDefaultState(),

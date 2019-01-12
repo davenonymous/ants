@@ -12,7 +12,7 @@ import org.dave.ants.api.render.IVoxelSpace;
 public class ForagingGroundsVoxelHandler implements IAntChamberVoxelHandler {
     @Override
     public void addVoxels(IVoxelSpace voxels, IExtendedBlockState extendedBlockState) {
-        IBlockState wool = Blocks.WOOL.getStateFromMeta(EnumDyeColor.GREEN.getMetadata());
+        @SuppressWarnings("deprecation") IBlockState wool = Blocks.WOOL.getStateFromMeta(EnumDyeColor.GREEN.getMetadata());
 
         int xOffset = 3;
         int yOffset = 4;

@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
+import org.dave.ants.api.properties.IHillProperty;
 import org.dave.ants.hills.HillData;
 
 import java.util.Collections;
@@ -100,7 +101,7 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      * incorporate the previous value!
      *
      * If you want to add additional properties to Ant Hills that are manipulated
-     * in your chamber, take a look at the {@link org.dave.ants.api.hill.IHillProperty}
+     * in your chamber, take a look at the {@link IHillProperty}
      * interface.
      *
      * @param data Data structure the Ant hill operates on. Can be modified freely.
@@ -118,7 +119,7 @@ public interface IAntChamber extends INBTSerializable<NBTTagCompound> {
      *
      * I repeat: If you are dealing only with values pertaining to the ant hill
      * this chamber is in, you do not want to use ticking chambers, but implementations
-     * of {@link org.dave.ants.api.hill.IHillProperty} and IGameTickCalculation.
+     * of {@link IHillProperty} and IGameTickCalculation.
      *
      * Only called on the server.
      *

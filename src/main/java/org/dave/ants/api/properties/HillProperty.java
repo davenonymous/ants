@@ -1,4 +1,4 @@
-package org.dave.ants.api.hill;
+package org.dave.ants.api.properties;
 
 public @interface HillProperty {
     String mod() default "";

@@ -1,4 +1,4 @@
-package org.dave.ants.api.hill;
+package org.dave.ants.api.properties;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;

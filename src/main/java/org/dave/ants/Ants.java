@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.dave.ants.calculation.CalculationRegistry;
 import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.compat.CompatHandler;
+import org.dave.ants.compat.PluginRegistry;
 import org.dave.ants.config.ConfigurationHandler;
 import org.dave.ants.hills.HillPropertyRegistry;
 import org.dave.ants.misc.CreativeTabAnts;
@@ -19,8 +20,6 @@ import org.dave.ants.proxy.CommonProxy;
 import org.dave.ants.chambers.VoxelHandlerRegistry;
 import org.dave.ants.util.AnnotatedInstanceUtil;
 import org.dave.ants.util.Logz;
-
-import java.util.concurrent.Callable;
 
 @Mod(
         modid = Ants.MODID,
@@ -41,7 +40,14 @@ public class Ants {
     public static CommonProxy proxy;
 
     public static final CreativeTabAnts CREATIVE_TAB = new CreativeTabAnts();
+
     public static final WorldSavedDataRegistry savedData = new WorldSavedDataRegistry();
+
+    public static final PluginRegistry pluginRegistry = new PluginRegistry();
+    public static final HillPropertyRegistry hillProperties = new HillPropertyRegistry();
+    public static final ChamberRegistry chamberTypes = new ChamberRegistry();
+    public static final CalculationRegistry calculations = new CalculationRegistry();
+    public static final VoxelHandlerRegistry voxelHandlers = new VoxelHandlerRegistry();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -49,10 +55,18 @@ public class Ants {
 
         AnnotatedInstanceUtil.asmDataTable = event.getAsmData();
 
-        HillPropertyRegistry.findHillProperties();
-        ChamberRegistry.findChamberIntegrations();
-        CalculationRegistry.loadAntCalculations();
-        VoxelHandlerRegistry.instantiateVoxelHandlers();
+        // First load all plugins
+        pluginRegistry.loadAntsPlugins();
+
+        // Then initialize all registries and notify each plugin accordingly
+        hillProperties.findHillProperties();
+        pluginRegistry.forEach(plugin -> plugin.registryReady(hillProperties));
+        chamberTypes.findChamberIntegrations();
+        pluginRegistry.forEach(plugin -> plugin.registryReady(chamberTypes));
+        calculations.loadAntCalculations();
+        pluginRegistry.forEach(plugin -> plugin.registryReady(calculations));
+        voxelHandlers.loadVoxelHandlers();
+        pluginRegistry.forEach(plugin -> plugin.registryReady(voxelHandlers));
 
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(ConfigurationHandler.class);

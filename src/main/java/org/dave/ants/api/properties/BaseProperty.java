@@ -2,7 +2,6 @@ package org.dave.ants.api.properties;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
-import org.dave.ants.api.hill.IHillProperty;
 import org.dave.ants.api.serialization.Store;
 import org.dave.ants.util.serialization.FieldHandlers;
 

@@ -4,9 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.base.BaseItemBlock;
-import org.dave.ants.chambers.ChamberRegistry;
 import org.dave.ants.chambers.entrance.EntranceChamber;
 
 public class ChamberHillItemBlock extends BaseItemBlock {
@@ -22,12 +23,12 @@ public class ChamberHillItemBlock extends BaseItemBlock {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if(this.isInCreativeTab(tab)) {
-            for(Class<? extends IAntChamber> chamberClass : ChamberRegistry.getChamberTypes()) {
+            for(Class<? extends IAntChamber> chamberClass : Ants.chamberTypes.getChamberTypes()) {
                 if(chamberClass == EntranceChamber.class) {
                     continue;
                 }
 
-                items.add(ChamberRegistry.createItemStackForChamberType(chamberClass));
+                items.add(Ants.chamberTypes.createItemStackForChamberType(chamberClass));
             }
         }
     }

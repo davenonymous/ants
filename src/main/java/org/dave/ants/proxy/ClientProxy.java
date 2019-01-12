@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.chambers.ChamberRegistry;
+import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.hills.HillItemStackData;
 import org.dave.ants.init.Blockss;
 import org.dave.ants.init.Itemss;
@@ -30,7 +30,7 @@ public class ClientProxy extends CommonProxy {
         // Register ant chamber item models
         Item itemBlock = Item.REGISTRY.getObject(new ResourceLocation(Ants.MODID, "hill_chamber"));
 
-        for(Class<? extends IAntChamber> antChamberType : ChamberRegistry.getChamberTypes()) {
+        for(Class<? extends IAntChamber> antChamberType : Ants.chamberTypes.getChamberTypes()) {
             ResourceLocation newResLoc = new ResourceLocation(Ants.MODID, "hill_chamber_" + antChamberType.getSimpleName().toLowerCase());
             ModelLoader.registerItemVariants(itemBlock, newResLoc);
         }
@@ -57,7 +57,7 @@ public class ClientProxy extends CommonProxy {
                 return -1;
             }
 
-            IAntChamber chamber = ChamberRegistry.getChamberInstance(data);
+            IAntChamber chamber = Ants.chamberTypes.getChamberInstance(data);
             if(chamber == null) {
                 return -1;
             }
