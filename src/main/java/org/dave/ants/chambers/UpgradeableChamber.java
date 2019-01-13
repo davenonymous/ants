@@ -16,8 +16,6 @@ import org.dave.ants.base.BaseNBTSerializable;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
-import static org.dave.ants.gui.ClientChamberGuiCache.getPropertyValue;
-
 public abstract class UpgradeableChamber extends BaseNBTSerializable implements IAntChamber {
     @Store
     public int upgrades = 0;
@@ -77,7 +75,7 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
             return WidgetEventResult.HANDLED;
         });
 
-        double totalAnts = getPropertyValue(TotalAnts.class);
+        double totalAnts = Ants.clientHillData.getPropertyValue(TotalAnts.class);
         double price = getUpgradePrice();
         button.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(price)));
         if(price > totalAnts) {

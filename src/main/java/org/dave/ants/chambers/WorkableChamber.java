@@ -17,8 +17,6 @@ import org.dave.ants.util.serialization.Store;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
-import static org.dave.ants.gui.ClientChamberGuiCache.getPropertyValue;
-
 public abstract class WorkableChamber extends UpgradeableChamber {
     @Store
     public int workers = 0;
@@ -79,7 +77,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
             return WidgetEventResult.HANDLED;
         });
 
-        double totalAnts = getPropertyValue(TotalAnts.class);
+        double totalAnts = Ants.clientHillData.getPropertyValue(TotalAnts.class);
         double price = getPriceForNextWorkers(count);
 
         addWorkerButton.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(price)));

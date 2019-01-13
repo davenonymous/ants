@@ -2,6 +2,7 @@ package org.dave.ants.chambers.foraging;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.Widget;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
@@ -9,7 +10,7 @@ import org.dave.ants.api.gui.widgets.composed.WidgetStatsTable;
 import org.dave.ants.api.properties.calculated.FoodGainPerTick;
 import org.dave.ants.chambers.WorkableChamber;
 import org.dave.ants.config.GeneralAntHillConfig;
-import org.dave.ants.gui.ClientChamberGuiCache;
+import org.dave.ants.gui.ClientHillData;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
@@ -79,7 +80,7 @@ public class ForagingGrounds extends WorkableChamber {
         double upgradedFoodGain = baseValue * Math.pow(GeneralAntHillConfig.defaultUpgradeMultiplier, upgrades);
         double workedFoodGain = upgradedFoodGain * Math.pow(GeneralAntHillConfig.defaultWorkerMultiplier, workers);
 
-        double percentOfTotal = workedFoodGain / ClientChamberGuiCache.getPropertyValue(FoodGainPerTick.class);
+        double percentOfTotal = workedFoodGain / Ants.clientHillData.getPropertyValue(FoodGainPerTick.class);
 
         statsTable.addStatistic(
                 I18n.format("gui.ants.chamber.common.worker.stats.worker_production"),

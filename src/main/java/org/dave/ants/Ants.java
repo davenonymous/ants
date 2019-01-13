@@ -15,6 +15,7 @@ import org.dave.ants.compat.AntApiHelpers;
 import org.dave.ants.compat.CompatHandler;
 import org.dave.ants.compat.PluginRegistry;
 import org.dave.ants.config.ConfigurationHandler;
+import org.dave.ants.gui.ClientHillData;
 import org.dave.ants.hills.HillPropertyRegistry;
 import org.dave.ants.misc.CreativeTabAnts;
 import org.dave.ants.misc.WorldSavedDataRegistry;
@@ -44,6 +45,7 @@ public class Ants {
     public static final CreativeTabAnts CREATIVE_TAB = new CreativeTabAnts();
 
     public static final WorldSavedDataRegistry savedData = new WorldSavedDataRegistry();
+    public static final ClientHillData clientHillData = new ClientHillData();
 
     public static final PluginRegistry pluginRegistry = new PluginRegistry();
     public static final HillPropertyRegistry hillProperties = new HillPropertyRegistry();

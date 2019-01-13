@@ -4,14 +4,14 @@ package org.dave.ants.chambers.livingquarters;
 import com.google.common.math.LongMath;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.composed.WidgetStatsTable;
-import org.dave.ants.api.properties.calculated.FoodCapacity;
 import org.dave.ants.api.properties.calculated.MaxAnts;
 import org.dave.ants.chambers.UpgradeableChamber;
 import org.dave.ants.config.GeneralAntHillConfig;
-import org.dave.ants.gui.ClientChamberGuiCache;
+import org.dave.ants.gui.ClientHillData;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
@@ -64,7 +64,7 @@ public class LivingQuarters extends UpgradeableChamber {
         statsTable.setY(25);
 
         long totalCapacityModifier = LongMath.pow(10, upgrades);
-        double percentOfTotal = totalCapacityModifier / ClientChamberGuiCache.getPropertyValue(MaxAnts.class);
+        double percentOfTotal = totalCapacityModifier / Ants.clientHillData.getPropertyValue(MaxAnts.class);
 
         statsTable.addStatistic(
                 I18n.format("gui.ants.chamber.living_quarters.stats.beds"),

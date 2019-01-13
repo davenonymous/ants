@@ -7,11 +7,9 @@ import org.dave.ants.api.gui.widgets.Widget;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.composed.WidgetStatsTable;
 import org.dave.ants.api.properties.calculated.AntsBornPerHatching;
-import org.dave.ants.api.properties.calculated.MaxAnts;
 import org.dave.ants.api.properties.calculated.TicksBetweenBabies;
 import org.dave.ants.chambers.WorkableChamber;
 import org.dave.ants.config.GeneralAntHillConfig;
-import org.dave.ants.gui.ClientChamberGuiCache;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
@@ -45,7 +43,7 @@ public class QueensChamber extends WorkableChamber {
 
     @Override
     public boolean shouldListInStore() {
-        return true; //ClientChamberGuiCache.getPropertyValue(MaxAnts.class) >= minimumBedsToBeVisible;
+        return true; //ClientHillData.getPropertyValue(MaxAnts.class) >= minimumBedsToBeVisible;
     }
 
 
