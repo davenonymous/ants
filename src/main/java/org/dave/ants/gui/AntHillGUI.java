@@ -26,11 +26,10 @@ import org.dave.ants.api.gui.ants.WidgetBuyChamberButton;
 import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.calculated.*;
 import org.dave.ants.api.properties.stored.StoredFood;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.chambers.entrance.EntranceChamber;
 import org.dave.ants.init.Blockss;
 import org.dave.ants.tiles.BaseHillTile;
-import org.dave.ants.util.Logz;
 import org.dave.ants.util.SmartNumberFormatter;
 
 import java.util.Collections;
@@ -163,20 +162,20 @@ public class AntHillGUI extends GUI {
     public WidgetPanel createHillInfoPanel() {
         WidgetPanel hillInfos = new WidgetPanel();
 
-        WidgetLabeledProgressBar totalAnts = new WidgetLabeledProgressBar(I18n.format("gui.ants.hill_chamber.tabs.stats.total_ants"), 0, Ants.clientHillData.getPropertyValue(MaxAnts.class), Ants.clientHillData.getPropertyValue(TotalAnts.class));
-        totalAnts.setWidth(165);
-        totalAnts.setHeight(20);
-        totalAnts.setY(0);
-        totalAnts.addTooltipLine(I18n.format("gui.ants.hill_chamber.stats.total_ants.tooltip.antsperhatching", SmartNumberFormatter.formatNumber(Ants.clientHillData.getPropertyValue(AntsBornPerHatching.class))));
-        totalAnts.addTooltipLine(I18n.format("gui.ants.hill_chamber.stats.total_ants.tooltip.interval", SmartNumberFormatter.formatNumber((double)Ants.clientHillData.getPropertyValue(TicksBetweenBabies.class) / 20.0)));
-        hillInfos.add(totalAnts);
+        WidgetLabeledProgressBar usableAnts = new WidgetLabeledProgressBar(I18n.format("gui.ants.hill_chamber.tabs.stats.usable_ants"), 0, Ants.clientHillData.getPropertyValue(MaxAnts.class), Ants.clientHillData.getPropertyValue(UsableAnts.class));
+        usableAnts.setWidth(165);
+        usableAnts.setHeight(20);
+        usableAnts.setY(0);
+        usableAnts.addTooltipLine(I18n.format("gui.ants.hill_chamber.stats.usable_ants.tooltip.antsperhatching", SmartNumberFormatter.formatNumber(Ants.clientHillData.getPropertyValue(AntsBornPerHatching.class))));
+        usableAnts.addTooltipLine(I18n.format("gui.ants.hill_chamber.stats.usable_ants.tooltip.interval", SmartNumberFormatter.formatNumber((double)Ants.clientHillData.getPropertyValue(TicksBetweenBabies.class) / 20.0)));
+        hillInfos.add(usableAnts);
 
         WidgetLabeledProgressBar storedFood = new WidgetLabeledProgressBar(I18n.format("gui.ants.hill_chamber.tabs.stats.stored_food"), 0, Ants.clientHillData.getPropertyValue(FoodCapacity.class), Ants.clientHillData.getPropertyValue(StoredFood.class));
         storedFood.setWidth(165);
         storedFood.setHeight(20);
         storedFood.setY(25);
 
-        double eaten = Ants.clientHillData.getPropertyValue(FoodRequirementPerAnt.class) * Ants.clientHillData.getPropertyValue(TotalAnts.class) * 20;
+        double eaten = Ants.clientHillData.getPropertyValue(FoodRequirementPerAnt.class) * Ants.clientHillData.getPropertyValue(UsableAnts.class) * 20;
         double gathered = Ants.clientHillData.getPropertyValue(FoodGainPerTick.class) * 20;
         double total =  gathered - eaten;
 
@@ -229,7 +228,7 @@ public class AntHillGUI extends GUI {
             }
 
             double cost = chamber.tierCost(nextTier, chamber.getTierList().get(nextTier));
-            if(Ants.clientHillData.getPropertyValue(TotalAnts.class) < cost) {
+            if(Ants.clientHillData.getPropertyValue(UsableAnts.class) < cost) {
                 button.setEnabled(false);
             }
 

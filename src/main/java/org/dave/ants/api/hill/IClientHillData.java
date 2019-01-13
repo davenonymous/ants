@@ -2,6 +2,7 @@ package org.dave.ants.api.hill;
 
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.properties.IHillProperty;
+import org.dave.ants.api.properties.stored.UsableAnts;
 
 /**
  * Do not implement this, you get a reference to it in your {@link org.dave.ants.api.IAntPlugin}.
@@ -59,7 +60,7 @@ public interface IClientHillData {
 
     /**
      * Retrieve the value of an {@link IHillProperty} the player is having a GUI open for.
-     * You can use this to e.g. look up the current amount of ants using {@link org.dave.ants.api.properties.stored.TotalAnts}
+     * You can use this to e.g. look up the current amount of ants using {@link UsableAnts}
      *
      * @param property The class of the property you want to receive
      * @param <V>      The type the property stores

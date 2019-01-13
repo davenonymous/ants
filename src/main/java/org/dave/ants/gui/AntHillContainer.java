@@ -8,14 +8,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.blocks.BaseHillBlock;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.network.AntsNetworkHandler;
 import org.dave.ants.network.ChamberDataMessage;
 import org.dave.ants.tiles.BaseHillTile;
 import org.dave.ants.util.DimPos;
-import org.dave.ants.util.Logz;
 
 public class AntHillContainer extends Container {
     World world;

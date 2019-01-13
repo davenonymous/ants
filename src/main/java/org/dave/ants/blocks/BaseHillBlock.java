@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.base.BaseBlock;
 import org.dave.ants.compat.TheOneProbe.ITopInfoProvider;
 import org.dave.ants.hills.HillData;
@@ -268,7 +268,7 @@ public class BaseHillBlock extends BaseBlock implements ITopInfoProvider {
         }
 
         probeInfo.horizontal().text("{*tile.ants.hill.overlay.id*} " + hillData.hillId);
-        probeInfo.horizontal().text("{*tile.ants.hill.overlay.ants*} " + SmartNumberFormatter.formatNumber(hillData.getPropertyValue(TotalAnts.class)));
+        probeInfo.horizontal().text("{*tile.ants.hill.overlay.ants*} " + SmartNumberFormatter.formatNumber(hillData.getPropertyValue(UsableAnts.class)));
         probeInfo.horizontal().text("{*tile.ants.hill.overlay.chambers*} " + hillData.chambers.size());
     }
 }

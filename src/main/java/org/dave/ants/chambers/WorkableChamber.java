@@ -12,7 +12,7 @@ import org.dave.ants.api.gui.widgets.WidgetButton;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetProgressBar;
 import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
@@ -77,12 +77,12 @@ public abstract class WorkableChamber extends UpgradeableChamber {
             return WidgetEventResult.HANDLED;
         });
 
-        double totalAnts = Ants.clientHillData.getPropertyValue(TotalAnts.class);
+        double usableAnts = Ants.clientHillData.getPropertyValue(UsableAnts.class);
         double price = getPriceForNextWorkers(count);
 
         addWorkerButton.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(price)));
 
-        if(price > totalAnts) {
+        if(price > usableAnts) {
             addWorkerButton.setEnabled(false);
             addWorkerButton.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.need_more_ants"));
         }
@@ -159,7 +159,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
             AddWorker addWorkerAction = (AddWorker)action;
 
             double price = getPriceForNextWorkers(addWorkerAction.count);
-            if(price > hillData.getPropertyValue(TotalAnts.class)) {
+            if(price > hillData.getPropertyValue(UsableAnts.class)) {
                 return;
             }
 
@@ -167,7 +167,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
                 return;
             }
 
-            hillData.modifyPropertyValue(TotalAnts.class, ants -> ants - price);
+            hillData.modifyPropertyValue(UsableAnts.class, ants -> ants - price);
             workers += addWorkerAction.count;
             this.markDirty();
             hillData.updateHillStatistics();

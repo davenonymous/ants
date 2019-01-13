@@ -18,7 +18,7 @@ tile.ants.hill.tooltip.must_start_new_colony=Can only be used to start a new ant
 gui.ants.hill_chamber.tabs.buy.tooltip=Buy chambers
 gui.ants.hill_chamber.tabs.stats.tooltip=Hill Overview
 
-gui.ants.hill_chamber.tabs.stats.total_ants=Total Ants
+gui.ants.hill_chamber.tabs.stats.usable_ants=Usable Ants
 gui.ants.hill_chamber.tabs.stats.stored_food=Stored Food
 
 gui.ants.hill_chamber.infos.buy_ants=Click to buy ants!
@@ -33,8 +33,8 @@ gui.ants.hill_chamber.infos.price=Price: %s ants
 gui.ants.hill_chamber.infos.gain=Gain: %s ants
 gui.ants.hill_chamber.infos.tier=Tier: %s
 
-gui.ants.hill_chamber.stats.total_ants.tooltip.antsperhatching=Rate: %s
-gui.ants.hill_chamber.stats.total_ants.tooltip.interval=Interval: %s
+gui.ants.hill_chamber.stats.usable_ants.tooltip.antsperhatching=Rate: %s
+gui.ants.hill_chamber.stats.usable_ants.tooltip.interval=Interval: %s
 
 gui.ants.hill_chamber.stats.stored_food.tooltip.eaten=- %s/s
 gui.ants.hill_chamber.stats.stored_food.tooltip.gathered=+ %s/s

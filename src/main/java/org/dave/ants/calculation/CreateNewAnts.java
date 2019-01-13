@@ -8,7 +8,7 @@ import org.dave.ants.api.properties.calculated.MaxAnts;
 import org.dave.ants.api.properties.calculated.TicksBetweenBabies;
 import org.dave.ants.api.properties.stored.LastAntBornTick;
 import org.dave.ants.api.properties.stored.StoredFood;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.hills.HillData;
 
 @AntCalculation
@@ -20,11 +20,11 @@ public class CreateNewAnts implements IAntCalculation {
 
     @Override
     public void calculate(HillData data, long currentWorldTick) {
-        double totalAnts = data.getPropertyValue(TotalAnts.class);
+        double usableAnts = data.getPropertyValue(UsableAnts.class);
         double maxAnts = data.getPropertyValue(MaxAnts.class);
 
         // Don't bear new babies if there is no more room
-        if(totalAnts >= maxAnts) {
+        if(usableAnts >= maxAnts) {
             return;
         }
 
@@ -41,7 +41,7 @@ public class CreateNewAnts implements IAntCalculation {
         // Create ants
         double antsBornPerHatching = data.getPropertyValue(AntsBornPerHatching.class);
 
-        data.setPropertyValue(TotalAnts.class, Math.min(totalAnts + antsBornPerHatching, maxAnts));
+        data.setPropertyValue(UsableAnts.class, Math.min(usableAnts + antsBornPerHatching, maxAnts));
 
         // Remember when we last created ants
         data.setPropertyValue(LastAntBornTick.class, currentWorldTick);

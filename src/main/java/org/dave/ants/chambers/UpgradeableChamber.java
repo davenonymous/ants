@@ -10,7 +10,7 @@ import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.*;
 import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
 import org.dave.ants.hills.HillData;
@@ -75,10 +75,10 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
             return WidgetEventResult.HANDLED;
         });
 
-        double totalAnts = Ants.clientHillData.getPropertyValue(TotalAnts.class);
+        double usableAnts = Ants.clientHillData.getPropertyValue(UsableAnts.class);
         double price = getUpgradePrice();
         button.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(price)));
-        if(price > totalAnts) {
+        if(price > usableAnts) {
             button.setEnabled(false);
             button.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.need_more_ants"));
         }
@@ -92,15 +92,15 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
     @Override
     public void onChamberAction(EntityPlayer player, IAntGuiAction action, HillData hillData) {
         if(action instanceof Upgrade) {
-            double totalAnts = hillData.getPropertyValue(TotalAnts.class);
+            double usableAnts = hillData.getPropertyValue(UsableAnts.class);
             double price = getUpgradePrice();
 
-            if(price > totalAnts) {
+            if(price > usableAnts) {
                 return;
             }
 
             this.upgrades++;
-            hillData.modifyPropertyValue(TotalAnts.class, ants -> ants - price);
+            hillData.modifyPropertyValue(UsableAnts.class, ants -> ants - price);
 
             this.markDirty();
             hillData.updateHillStatistics();

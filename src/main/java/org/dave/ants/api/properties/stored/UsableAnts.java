@@ -4,8 +4,8 @@ import org.dave.ants.api.properties.HillProperty;
 import org.dave.ants.api.properties.BaseProperty;
 
 @HillProperty(store = true)
-public class TotalAnts extends BaseProperty<Double> {
-    public TotalAnts() {
+public class UsableAnts extends BaseProperty<Double> {
+    public UsableAnts() {
         super(Double.class);
     }
 

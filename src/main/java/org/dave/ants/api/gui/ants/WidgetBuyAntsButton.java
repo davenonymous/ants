@@ -15,6 +15,7 @@ import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.WidgetButton;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetProgressBar;
+import org.dave.ants.api.properties.calculated.AntsBornPerHatching;
 import org.dave.ants.api.properties.calculated.FoodGainPerTick;
 import org.dave.ants.chambers.queen.QueensChamber;
 import org.dave.ants.util.SmartNumberFormatter;
@@ -64,8 +65,8 @@ public class WidgetBuyAntsButton extends WidgetPanel {
             int colorIndex = BuyAnt.getIndex(cooldownBar.getValue());
             cooldownBar.setForegroundColor(BuyAnt.colors[colorIndex]);
 
-            double price = Ants.clientHillData.getPropertyValue(FoodGainPerTick.class) * BuyAnt.price[colorIndex];
-            double gain = BuyAnt.gain[colorIndex];
+            double price = Ants.clientHillData.getPropertyValue(FoodGainPerTick.class) * BuyAnt.price[colorIndex] * 20;
+            double gain = BuyAnt.gain[colorIndex] * Ants.clientHillData.getPropertyValue(AntsBornPerHatching.class);
 
             this.setTooltipLines(
                     I18n.format("gui.ants.hill_chamber.infos.buy_ants"),

@@ -13,10 +13,11 @@ import org.dave.ants.api.actions.IAntGuiAction;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.hill.IHillData;
 import org.dave.ants.api.properties.IHillProperty;
+import org.dave.ants.api.properties.calculated.AntsBornPerHatching;
 import org.dave.ants.api.properties.calculated.FoodGainPerTick;
 import org.dave.ants.api.properties.calculated.MaxAnts;
 import org.dave.ants.api.properties.stored.StoredFood;
-import org.dave.ants.api.properties.stored.TotalAnts;
+import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
 import org.dave.ants.tiles.BaseHillTile;
@@ -111,8 +112,8 @@ public class HillData extends BaseNBTSerializable implements IHillData {
     public void onHillAction(EntityPlayerMP player, IAntGuiAction action) {
         if(action instanceof BuyAnt) {
             int index = BuyAnt.getIndex(this.buyAntCooldownTicks);
-            double price = this.getPropertyValue(FoodGainPerTick.class) * BuyAnt.price[index];
-            double gain = BuyAnt.gain[index];
+            double price = this.getPropertyValue(FoodGainPerTick.class) * BuyAnt.price[index] * 20;
+            double gain = BuyAnt.gain[index] * this.getPropertyValue(AntsBornPerHatching.class);
 
             if(getPropertyValue(StoredFood.class) < price) {
                 player.sendMessage(new TextComponentTranslation("gui.ants.hill_chamber.infos.need_more_food"));
@@ -120,12 +121,12 @@ public class HillData extends BaseNBTSerializable implements IHillData {
             }
 
             modifyPropertyValue(StoredFood.class, food -> food - price);
-            if(getPropertyValue(TotalAnts.class) + gain > getPropertyValue(MaxAnts.class)) {
-                gain = getPropertyValue(MaxAnts.class) - getPropertyValue(TotalAnts.class);
+            if(getPropertyValue(UsableAnts.class) + gain > getPropertyValue(MaxAnts.class)) {
+                gain = getPropertyValue(MaxAnts.class) - getPropertyValue(UsableAnts.class);
             }
 
             double finalGain = gain;
-            modifyPropertyValue(TotalAnts.class, ants -> ants + finalGain);
+            modifyPropertyValue(UsableAnts.class, ants -> ants + finalGain);
 
             this.buyAntCooldownTicks += BuyAnt.ticksPerClick;
         }
@@ -152,12 +153,12 @@ public class HillData extends BaseNBTSerializable implements IHillData {
             }
 
             double cost = chamber.tierCost(currentMaxTier, chamber.getTierList().get(currentMaxTier));
-            if(getPropertyValue(TotalAnts.class) < cost) {
+            if(getPropertyValue(UsableAnts.class) < cost) {
                 player.sendMessage(new TextComponentTranslation("gui.ants.hill_chamber.infos.need_more_ants"));
                 return;
             }
 
-            modifyPropertyValue(TotalAnts.class, ants -> ants - cost);
+            modifyPropertyValue(UsableAnts.class, ants -> ants - cost);
 
             ItemStack stack = Ants.chamberTypes.createItemStackForChamberType(buyChamberAction.type, buyChamberAction.tier);
             if(!player.addItemStackToInventory(stack)) {
