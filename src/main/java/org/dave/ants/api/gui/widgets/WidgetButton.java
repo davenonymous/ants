@@ -58,15 +58,12 @@ public class WidgetButton extends Widget {
 
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
         GlStateManager.translate(0.0f, 0.0f, 2.0f);
 
         // Draw the background
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        if(!enabled) {
-            GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
-        } else if(hovered) {
-            GlStateManager.color(0.55F, 0.65F, 1.0F, 1.0F);
-        }
+
 
         if(atlasSprite != null) {
             screen.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -112,9 +109,16 @@ public class WidgetButton extends Widget {
         // Right edge
         GUIHelper.drawStretchedTexture(0+width - 4, 4, 4, this.height - 8, texOffsetX + overlayWidth - 4, texOffsetY + 3, 4, 12);
 
-
         FontRenderer fontrenderer = screen.mc.fontRenderer;
+        GlStateManager.translate(0.0f, 0.0f, 10.0f);
         drawButtonContent(screen, fontrenderer);
+        GlStateManager.translate(0.0f, 0.0f, -10.0f);
+
+        if(!enabled) {
+            GUIHelper.drawColoredRectangle(1, 1, width-2, height-2, 0x80000000);
+        } else if(hovered) {
+            GUIHelper.drawColoredRectangle(1, 1, width-2, height-2, 0x808090FF);
+        }
 
         GlStateManager.popMatrix();
     }

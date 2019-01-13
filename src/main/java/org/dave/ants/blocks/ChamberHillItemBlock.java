@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.IAntChamber;
-import org.dave.ants.api.chambers.IChamberRegistry;
 import org.dave.ants.base.BaseItemBlock;
 import org.dave.ants.chambers.entrance.EntranceChamber;
 
@@ -28,7 +27,7 @@ public class ChamberHillItemBlock extends BaseItemBlock {
                     continue;
                 }
 
-                items.add(Ants.chamberTypes.createItemStackForChamberType(chamberClass));
+                items.add(Ants.chamberTypes.createItemStackForChamberType(chamberClass, 0));
             }
         }
     }

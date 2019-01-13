@@ -6,11 +6,10 @@ import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.Widget;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
-import org.dave.ants.api.gui.widgets.composed.WidgetStatsTable;
+import org.dave.ants.api.gui.ants.WidgetStatsTable;
 import org.dave.ants.api.properties.calculated.FoodGainPerTick;
 import org.dave.ants.chambers.WorkableChamber;
 import org.dave.ants.config.GeneralAntHillConfig;
-import org.dave.ants.gui.ClientHillData;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 

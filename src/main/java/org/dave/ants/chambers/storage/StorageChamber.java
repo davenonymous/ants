@@ -1,11 +1,11 @@
 package org.dave.ants.chambers.storage;
 
-import com.google.common.math.LongMath;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
-import org.dave.ants.api.gui.widgets.WidgetTextBox;
+import org.dave.ants.api.gui.ants.WidgetStatsTable;
 import org.dave.ants.api.properties.calculated.FoodCapacity;
 import org.dave.ants.chambers.UpgradeableChamber;
 import org.dave.ants.config.GeneralAntHillConfig;
@@ -58,14 +58,26 @@ public class StorageChamber extends UpgradeableChamber {
         WidgetPanel storagePanel = new WidgetPanel();
         storagePanel.add(getUpgradeBar());
 
-        long totalCapacityModifier = LongMath.pow(10, upgrades+2);
+        WidgetStatsTable statsTable = new WidgetStatsTable();
+        statsTable.setX(1);
+        statsTable.setY(25);
 
-        WidgetTextBox capacityTextBox = new WidgetTextBox(I18n.format("gui.ants.chamber.storage_chamber.space", SmartNumberFormatter.formatNumber(totalCapacityModifier)));
-        capacityTextBox.setTextColor(0xFF333333);
-        capacityTextBox.setWidth(120);
-        capacityTextBox.setHeight(18);
-        capacityTextBox.setY(25);
-        storagePanel.add(capacityTextBox);
+
+        double baseValue = baseFoodCrates * GeneralAntHillConfig.defaultTierIncomeRate.get(tier);
+        double totalCrates = baseValue * Math.pow(GeneralAntHillConfig.defaultUpgradeMultiplier, upgrades);
+        double percentOfTotal = totalCrates / Ants.clientHillData.getPropertyValue(FoodCapacity.class);
+
+        statsTable.addStatistic(
+                I18n.format("gui.ants.chamber.storage_chamber.space"),
+                SmartNumberFormatter.formatNumber(totalCrates)
+        );
+
+        statsTable.addStatistic(
+                I18n.format("gui.ants.chamber.common.stats.percent_of_total"),
+                String.format("%.1f%%", percentOfTotal * 100)
+        );
+
+        storagePanel.add(statsTable);
 
         return storagePanel;
     }

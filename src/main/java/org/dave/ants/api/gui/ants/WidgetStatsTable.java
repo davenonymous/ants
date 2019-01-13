@@ -1,4 +1,4 @@
-package org.dave.ants.api.gui.widgets.composed;
+package org.dave.ants.api.gui.ants;
 
 import net.minecraft.client.Minecraft;
 import org.dave.ants.api.gui.widgets.WidgetTable;

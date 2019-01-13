@@ -10,9 +10,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.dave.ants.Ants;
+import org.dave.ants.actions.BuyAnt;
 import org.dave.ants.actions.BuyChamber;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.gui.GUI;
+import org.dave.ants.api.gui.ants.WidgetBuyAntsButton;
 import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.TabChangedEvent;
 import org.dave.ants.api.gui.event.UpdateScreenEvent;
@@ -20,14 +22,15 @@ import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetTable;
 import org.dave.ants.api.gui.widgets.WidgetTabsPanel;
-import org.dave.ants.api.gui.widgets.composed.WidgetBuyChamberButton;
-import org.dave.ants.api.gui.widgets.composed.WidgetLabeledProgressBar;
+import org.dave.ants.api.gui.ants.WidgetBuyChamberButton;
+import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.calculated.*;
 import org.dave.ants.api.properties.stored.StoredFood;
 import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.chambers.entrance.EntranceChamber;
 import org.dave.ants.init.Blockss;
 import org.dave.ants.tiles.BaseHillTile;
+import org.dave.ants.util.Logz;
 import org.dave.ants.util.SmartNumberFormatter;
 
 import java.util.Collections;
@@ -38,7 +41,12 @@ public class AntHillGUI extends GUI {
 
     private World world;
     private BlockPos pos;
+
     private int chamberTier = 0;
+    private double cooldownTicks = 0;
+    private long lastWorldTick = Long.MIN_VALUE;
+
+    private WidgetBuyAntsButton buyAntsButton;
 
     public AntHillGUI(int width, int height, World world, BlockPos pos) {
         super(0, 0, width, height);
@@ -54,6 +62,21 @@ public class AntHillGUI extends GUI {
         this.addListener(UpdateScreenEvent.class, (event, widget) -> {
             if(!Ants.clientHillData.hasData()) {
                 return WidgetEventResult.CONTINUE_PROCESSING;
+            }
+
+            if(lastWorldTick < world.getTotalWorldTime()) {
+                long missedTicks = world.getTotalWorldTime() - lastWorldTick;
+                missedTicks = Math.min(20, Math.max(0, missedTicks));
+
+                cooldownTicks -= missedTicks;
+                cooldownTicks = Math.min(100, Math.max(0, cooldownTicks));
+
+                if(buyAntsButton != null) {
+                    double newTicks = buyAntsButton.getCooldownTicks() - missedTicks;
+                    newTicks = Math.min(100, Math.max(0, newTicks));
+                    buyAntsButton.setCooldownTicks(newTicks);
+                }
+                lastWorldTick = world.getTotalWorldTime();
             }
 
             if(Ants.clientHillData.lastMessageReceived <= guiCreatedTimestamp) {
@@ -112,7 +135,7 @@ public class AntHillGUI extends GUI {
             chamberPanel.setY(5);
             chamberPanel.setId("ChamberPanel");
 
-            ItemStack stack = Ants.chamberTypes.createItemStackForChamberType(Ants.clientHillData.chamberType);
+            ItemStack stack = Ants.chamberTypes.createItemStackForChamberType(Ants.clientHillData.chamberType, 0);
             tabs.addPage(chamberPanel, stack, Collections.singletonList(I18n.format(stack.getTranslationKey() + ".name")));
 
             if(activeTab == -1) {
@@ -163,7 +186,17 @@ public class AntHillGUI extends GUI {
 
         hillInfos.add(storedFood);
 
-        // TODO: Add ability to buy ants for food
+        this.buyAntsButton = new WidgetBuyAntsButton();
+        buyAntsButton.setX((165 - buyAntsButton.width) / 2);
+        buyAntsButton.setY(75);
+        buyAntsButton.setCooldownTicks(cooldownTicks);
+
+        buyAntsButton.addListener(MouseClickEvent.class, (event, widget) -> {
+            cooldownTicks += BuyAnt.ticksPerClick;
+            return WidgetEventResult.CONTINUE_PROCESSING;
+        });
+
+        hillInfos.add(buyAntsButton);
 
         return hillInfos;
     }
@@ -200,10 +233,17 @@ public class AntHillGUI extends GUI {
                 button.setEnabled(false);
             }
 
+            ItemStack stackForState = state.getBlock().getPickBlock(state, null, world, this.pos, null);
+            if(!stackForState.isEmpty()) {
+                String localizedTierName = I18n.format(stackForState.getTranslationKey() + ".name");
+                localizedTierName = localizedTierName.replaceAll("Block of ", "");
+                button.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.tier", localizedTierName));
+            }
+
             button.addTooltipLine(I18n.format("gui.ants.hill_chamber.infos.price", SmartNumberFormatter.formatNumber(cost)));
 
             button.addListener(MouseClickEvent.class, (event, widget) -> {
-                Ants.actionRegistry.fireHillAction(new BuyChamber(type));
+                Ants.actionRegistry.fireHillAction(new BuyChamber(type, nextTier));
                 return WidgetEventResult.HANDLED;
             });
 

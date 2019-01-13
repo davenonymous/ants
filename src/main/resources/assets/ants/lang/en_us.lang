@@ -21,12 +21,17 @@ gui.ants.hill_chamber.tabs.stats.tooltip=Hill Overview
 gui.ants.hill_chamber.tabs.stats.total_ants=Total Ants
 gui.ants.hill_chamber.tabs.stats.stored_food=Stored Food
 
+gui.ants.hill_chamber.infos.buy_ants=Click to buy ants!
 gui.ants.hill_chamber.infos.max_label_value=Max: %s
+gui.ants.hill_chamber.infos.need_more_food=You need more food!
 gui.ants.hill_chamber.infos.need_more_ants=You need more ants!
 gui.ants.hill_chamber.infos.need_one_worker=You need at least one worker first.
 gui.ants.hill_chamber.infos.out_of_room=Out of room!
 gui.ants.hill_chamber.infos.upgrade_first=Upgrade first!
+gui.ants.hill_chamber.infos.price_food=Price: %s food
 gui.ants.hill_chamber.infos.price=Price: %s ants
+gui.ants.hill_chamber.infos.gain=Gain: %s ants
+gui.ants.hill_chamber.infos.tier=Tier: %s
 
 gui.ants.hill_chamber.stats.total_ants.tooltip.antsperhatching=Rate: %s
 gui.ants.hill_chamber.stats.total_ants.tooltip.interval=Interval: %s
@@ -48,12 +53,13 @@ gui.ants.chamber.common.stats.percent_of_total=%% of Total:
 
 
 gui.ants.chamber.queens_chamber.stats.interval_reduced=Speed increase:
+gui.ants.chamber.queens_chamber.stats.extra_ants=Extra ants:
 gui.ants.chamber.queens_chamber.description=Increases the amount and birth frequency of ants.
 
-gui.ants.chamber.living_quarters.stats.beds=Beds:
+gui.ants.chamber.living_quarters.stats.beds=Extra beds:
 gui.ants.chamber.living_quarters.description=Increases your maximum ant capacity.
 
-gui.ants.chamber.storage_chamber.space=Capacity: %s
+gui.ants.chamber.storage_chamber.space=Capacity increase:
 gui.ants.chamber.storage_chamber.description=Increases the maximum food you can store.
 
 gui.ants.chamber.foraging_grounds.stats.food_gathered=Food gain:

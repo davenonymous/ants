@@ -10,7 +10,7 @@ import java.util.Set;
 public interface IChamberRegistry {
     void registerChamberType(Class<? extends IAntChamber> chamberType);
 
-    ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType);
+    ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType, int chamberTier);
 
     @Nullable
     IAntChamber getChamberInstance(@Nonnull IAntStackData data);

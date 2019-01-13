@@ -11,7 +11,7 @@ import org.dave.ants.api.gui.widgets.Widget;
 import org.dave.ants.api.gui.widgets.WidgetButton;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetProgressBar;
-import org.dave.ants.api.gui.widgets.composed.WidgetLabeledProgressBar;
+import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.hills.HillData;

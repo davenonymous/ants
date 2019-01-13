@@ -2,10 +2,11 @@ package org.dave.ants.chambers.queen;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.Widget;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
-import org.dave.ants.api.gui.widgets.composed.WidgetStatsTable;
+import org.dave.ants.api.gui.ants.WidgetStatsTable;
 import org.dave.ants.api.properties.calculated.AntsBornPerHatching;
 import org.dave.ants.api.properties.calculated.TicksBetweenBabies;
 import org.dave.ants.chambers.WorkableChamber;
@@ -76,7 +77,23 @@ public class QueensChamber extends WorkableChamber {
         statsTable.setX(1);
         statsTable.setY(75);
 
+        double baseValue = baseExtraAnts * GeneralAntHillConfig.defaultTierIncomeRate.get(tier);
+        double upgradedExtraAnts = baseValue * Math.pow(GeneralAntHillConfig.defaultUpgradeMultiplier, upgrades);
         double thisGain = ticksReducedPerWorker * workers;
+
+        double percentOfTotal = upgradedExtraAnts / Ants.clientHillData.getPropertyValue(AntsBornPerHatching.class);
+
+        double ticksBetweenBabies = Ants.clientHillData.getPropertyValue(TicksBetweenBabies.class) / 20.0d;
+
+        statsTable.addStatistic(
+                I18n.format("gui.ants.chamber.queens_chamber.stats.extra_ants"),
+                SmartNumberFormatter.formatNumber(upgradedExtraAnts) + " / " + SmartNumberFormatter.formatNumber(ticksBetweenBabies) + "s"
+        );
+
+        statsTable.addStatistic(
+                I18n.format("gui.ants.chamber.common.stats.percent_of_total"),
+                String.format("%.1f%%", percentOfTotal * 100)
+        );
 
         statsTable.addStatistic(
                 I18n.format("gui.ants.chamber.queens_chamber.stats.interval_reduced"),

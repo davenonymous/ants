@@ -43,10 +43,11 @@ public class ChamberRegistry implements IChamberRegistry {
     }
 
     @Override
-    public ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType) {
+    public ItemStack createItemStackForChamberType(Class<? extends IAntChamber> chamberType, int tier) {
         ItemStack stack = new ItemStack(Blockss.chamber, 1, 0);
         NBTTagCompound tagCompound = new NBTTagCompound();
         tagCompound.setString("chamberType", chamberType.getName());
+        tagCompound.setInteger("chamberTier", tier);
         stack.setTagCompound(tagCompound);
 
         return stack;

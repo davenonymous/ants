@@ -9,7 +9,7 @@ import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.*;
-import org.dave.ants.api.gui.widgets.composed.WidgetLabeledProgressBar;
+import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;

@@ -1,17 +1,15 @@
 package org.dave.ants.chambers.livingquarters;
 
 
-import com.google.common.math.LongMath;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import org.dave.ants.Ants;
 import org.dave.ants.api.chambers.AntChamber;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
-import org.dave.ants.api.gui.widgets.composed.WidgetStatsTable;
+import org.dave.ants.api.gui.ants.WidgetStatsTable;
 import org.dave.ants.api.properties.calculated.MaxAnts;
 import org.dave.ants.chambers.UpgradeableChamber;
 import org.dave.ants.config.GeneralAntHillConfig;
-import org.dave.ants.gui.ClientHillData;
 import org.dave.ants.hills.HillData;
 import org.dave.ants.util.SmartNumberFormatter;
 
@@ -63,12 +61,14 @@ public class LivingQuarters extends UpgradeableChamber {
         statsTable.setX(1);
         statsTable.setY(25);
 
-        long totalCapacityModifier = LongMath.pow(10, upgrades);
-        double percentOfTotal = totalCapacityModifier / Ants.clientHillData.getPropertyValue(MaxAnts.class);
+        double baseValue = baseBedCount * GeneralAntHillConfig.defaultTierIncomeRate.get(tier);
+        double totalBeds = baseValue * Math.pow(GeneralAntHillConfig.defaultUpgradeMultiplier, upgrades);
+
+        double percentOfTotal = totalBeds / Ants.clientHillData.getPropertyValue(MaxAnts.class);
 
         statsTable.addStatistic(
                 I18n.format("gui.ants.chamber.living_quarters.stats.beds"),
-                SmartNumberFormatter.formatNumber(totalCapacityModifier)
+                SmartNumberFormatter.formatNumber(totalBeds)
         );
         statsTable.addStatistic(
                 I18n.format("gui.ants.chamber.common.stats.percent_of_total"),
