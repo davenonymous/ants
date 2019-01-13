@@ -19,6 +19,7 @@ gui.ants.hill_chamber.tabs.buy.tooltip=Buy chambers
 gui.ants.hill_chamber.tabs.stats.tooltip=Hill Overview
 
 gui.ants.hill_chamber.tabs.stats.usable_ants=Usable Ants
+gui.ants.hill_chamber.tabs.stats.total_ants=%% of total ants
 gui.ants.hill_chamber.tabs.stats.stored_food=Stored Food
 
 gui.ants.hill_chamber.infos.buy_ants=Click to buy ants!

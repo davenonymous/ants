@@ -29,12 +29,12 @@ public class GeneralAntHillConfig {
 
     public static List<Double> defaultTierCost = Arrays.asList(
             15d,
-            100d,
-            500d,
-            3000d,
-            10000d,
-            40000d,
-            200000d,
+            200d,
+            1000d,
+            5000d,
+            20000d,
+            80000d,
+            400000d,
             1_500_000d,
             100_000_000d,
             4_000_000_000d,

@@ -33,7 +33,7 @@ public class AntHillContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        if(this.world.isRemote || this.world.getTotalWorldTime() % 20 != 0) {
+        if(this.world.isRemote || this.world.getTotalWorldTime() % 5 != 0) {
             return;
         }
 

@@ -17,6 +17,7 @@ import org.dave.ants.api.properties.calculated.AntsBornPerHatching;
 import org.dave.ants.api.properties.calculated.FoodGainPerTick;
 import org.dave.ants.api.properties.calculated.MaxAnts;
 import org.dave.ants.api.properties.stored.StoredFood;
+import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
@@ -159,6 +160,7 @@ public class HillData extends BaseNBTSerializable implements IHillData {
             }
 
             modifyPropertyValue(UsableAnts.class, ants -> ants - cost);
+            modifyPropertyValue(TotalAnts.class, ants -> ants + cost);
 
             ItemStack stack = Ants.chamberTypes.createItemStackForChamberType(buyChamberAction.type, buyChamberAction.tier);
             if(!player.addItemStackToInventory(stack)) {

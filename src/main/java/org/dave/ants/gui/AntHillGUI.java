@@ -15,17 +15,17 @@ import org.dave.ants.actions.BuyChamber;
 import org.dave.ants.api.chambers.IAntChamber;
 import org.dave.ants.api.gui.GUI;
 import org.dave.ants.api.gui.ants.WidgetBuyAntsButton;
+import org.dave.ants.api.gui.ants.WidgetStatsTable;
 import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.TabChangedEvent;
 import org.dave.ants.api.gui.event.UpdateScreenEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
-import org.dave.ants.api.gui.widgets.WidgetPanel;
-import org.dave.ants.api.gui.widgets.WidgetTable;
-import org.dave.ants.api.gui.widgets.WidgetTabsPanel;
+import org.dave.ants.api.gui.widgets.*;
 import org.dave.ants.api.gui.ants.WidgetBuyChamberButton;
 import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
 import org.dave.ants.api.properties.calculated.*;
 import org.dave.ants.api.properties.stored.StoredFood;
+import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.chambers.entrance.EntranceChamber;
 import org.dave.ants.init.Blockss;
@@ -162,18 +162,28 @@ public class AntHillGUI extends GUI {
     public WidgetPanel createHillInfoPanel() {
         WidgetPanel hillInfos = new WidgetPanel();
 
+        double totalAnts = Ants.clientHillData.getPropertyValue(TotalAnts.class) + Ants.clientHillData.getPropertyValue(UsableAnts.class);
+        WidgetLabeledProgressBar percentOfTotal = new WidgetLabeledProgressBar(I18n.format("gui.ants.hill_chamber.tabs.stats.total_ants"), 0, totalAnts, Ants.clientHillData.getPropertyValue(UsableAnts.class));
+        percentOfTotal.setWidth(165);
+        percentOfTotal.setHeight(20);
+        percentOfTotal.setY(0);
+        percentOfTotal.getProgressBar().setDisplayMode(WidgetProgressBar.EnumDisplayMode.PERCENTAGE);
+        hillInfos.add(percentOfTotal);
+
         WidgetLabeledProgressBar usableAnts = new WidgetLabeledProgressBar(I18n.format("gui.ants.hill_chamber.tabs.stats.usable_ants"), 0, Ants.clientHillData.getPropertyValue(MaxAnts.class), Ants.clientHillData.getPropertyValue(UsableAnts.class));
         usableAnts.setWidth(165);
         usableAnts.setHeight(20);
-        usableAnts.setY(0);
+        usableAnts.setY(25);
         usableAnts.addTooltipLine(I18n.format("gui.ants.hill_chamber.stats.usable_ants.tooltip.antsperhatching", SmartNumberFormatter.formatNumber(Ants.clientHillData.getPropertyValue(AntsBornPerHatching.class))));
         usableAnts.addTooltipLine(I18n.format("gui.ants.hill_chamber.stats.usable_ants.tooltip.interval", SmartNumberFormatter.formatNumber((double)Ants.clientHillData.getPropertyValue(TicksBetweenBabies.class) / 20.0)));
+        usableAnts.getProgressBar().setDisplayMode(WidgetProgressBar.EnumDisplayMode.VALUE);
         hillInfos.add(usableAnts);
+
 
         WidgetLabeledProgressBar storedFood = new WidgetLabeledProgressBar(I18n.format("gui.ants.hill_chamber.tabs.stats.stored_food"), 0, Ants.clientHillData.getPropertyValue(FoodCapacity.class), Ants.clientHillData.getPropertyValue(StoredFood.class));
         storedFood.setWidth(165);
         storedFood.setHeight(20);
-        storedFood.setY(25);
+        storedFood.setY(50);
 
         double eaten = Ants.clientHillData.getPropertyValue(FoodRequirementPerAnt.class) * Ants.clientHillData.getPropertyValue(UsableAnts.class) * 20;
         double gathered = Ants.clientHillData.getPropertyValue(FoodGainPerTick.class) * 20;
@@ -187,7 +197,7 @@ public class AntHillGUI extends GUI {
 
         this.buyAntsButton = new WidgetBuyAntsButton();
         buyAntsButton.setX((165 - buyAntsButton.width) / 2);
-        buyAntsButton.setY(75);
+        buyAntsButton.setY(85);
         buyAntsButton.setCooldownTicks(cooldownTicks);
 
         buyAntsButton.addListener(MouseClickEvent.class, (event, widget) -> {

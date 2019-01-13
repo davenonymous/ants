@@ -12,6 +12,7 @@ import org.dave.ants.api.gui.widgets.WidgetButton;
 import org.dave.ants.api.gui.widgets.WidgetPanel;
 import org.dave.ants.api.gui.widgets.WidgetProgressBar;
 import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
+import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.hills.HillData;
@@ -168,6 +169,7 @@ public abstract class WorkableChamber extends UpgradeableChamber {
             }
 
             hillData.modifyPropertyValue(UsableAnts.class, ants -> ants - price);
+            hillData.modifyPropertyValue(TotalAnts.class, ants -> ants + price);
             workers += addWorkerAction.count;
             this.markDirty();
             hillData.updateHillStatistics();

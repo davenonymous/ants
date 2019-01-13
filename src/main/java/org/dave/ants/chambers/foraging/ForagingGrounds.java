@@ -33,7 +33,7 @@ public class ForagingGrounds extends WorkableChamber {
     public static double upgradePriceMultiplier = 1.10d;
 
     // Tier-Scaling options
-    public static double baseFoodGainPerTick = 15;
+    public static double baseFoodGainPerTick = 5;
 
     @Override
     public String description() {

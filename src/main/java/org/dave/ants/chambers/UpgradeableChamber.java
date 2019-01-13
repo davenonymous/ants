@@ -10,6 +10,7 @@ import org.dave.ants.api.gui.event.MouseClickEvent;
 import org.dave.ants.api.gui.event.WidgetEventResult;
 import org.dave.ants.api.gui.widgets.*;
 import org.dave.ants.api.gui.ants.WidgetLabeledProgressBar;
+import org.dave.ants.api.properties.stored.TotalAnts;
 import org.dave.ants.api.properties.stored.UsableAnts;
 import org.dave.ants.util.serialization.Store;
 import org.dave.ants.base.BaseNBTSerializable;
@@ -101,6 +102,7 @@ public abstract class UpgradeableChamber extends BaseNBTSerializable implements 
 
             this.upgrades++;
             hillData.modifyPropertyValue(UsableAnts.class, ants -> ants - price);
+            hillData.modifyPropertyValue(TotalAnts.class, ants -> ants + price);
 
             this.markDirty();
             hillData.updateHillStatistics();

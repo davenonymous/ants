@@ -3,6 +3,7 @@ package org.dave.ants.api.gui.widgets;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import org.dave.ants.util.SmartNumberFormatter;
 
 public class WidgetProgressBar extends WidgetWithValue<Double> {
     int borderColor = 0xFF000000;
@@ -104,9 +105,9 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
             if(displayMode == EnumDisplayMode.PERCENTAGE) {
                 content = String.format("%.1f%%", progress*100);
             } else if(displayMode == EnumDisplayMode.VALUE) {
-                content = String.valueOf(this.getValue());
+                content = String.valueOf(SmartNumberFormatter.formatNumber(this.getValue()));
             } else if(displayMode == EnumDisplayMode.VALUE_AND_PERCENTAGE) {
-                content = String.format("%.1f%% (%.0f)", progress*100, this.getValue());
+                content = String.format("%.1f%% (%s)", progress*100, SmartNumberFormatter.formatNumber(this.getValue()));
             }
 
             int xPos = x + 1 + (width - fr.getStringWidth(content)) / 2;
